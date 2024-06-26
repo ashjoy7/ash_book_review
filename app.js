@@ -1,5 +1,3 @@
-require('dotenv').config();
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -11,7 +9,7 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(bodyParser.json());
-app.use(session({ secret: 'your_secret_key', resave: false, saveUninitialized: true }));
+app.use(session({ secret: 'process.env.SESSION_SECRET', resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 
