@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes')); // Your API routes
 
 // Swagger UI setup
-app.use('/api-docs', routes/swagger.js); // Assumes swaggerRoutes handles Swagger UI
+app.use('/api-docs', swagger.js); // Assumes swaggerRoutes handles Swagger UI
 
 // Initialize MongoDB connection
 mongodb.initDb((err) => {
