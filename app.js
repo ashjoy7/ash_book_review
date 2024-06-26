@@ -1,15 +1,24 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
 const mongodb = require('./db/connect');
 const swaggerRoutes = require('./routes/swagger');
-const passport = require('./auth'); 
+const passport = require('./auth');
+require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 const app = express();
 
 app.use(bodyParser.json());
-app.use(session({ secret: 'process.env.SESSION_SECRET', resave: false, saveUninitialized: true }));
+
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: true,
+  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+}));
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -28,7 +37,7 @@ app.options('*', (req, res) => {
   res.status(200).send();
 });
 
-mongodb.initDb((err, mongodb) => {
+mongodb.initDb((err) => {
   if (err) {
     console.log(err);
   } else {
