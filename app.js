@@ -13,6 +13,7 @@ const passport = require('./auth');
 const port = process.env.PORT || 3000;
 const app = express();
 
+// Middleware
 app.use(bodyParser.json());
 
 app.use(session({
@@ -33,16 +34,18 @@ app.use((req, res, next) => {
   next();
 });
 
-// Define your routes here
-app.use('/', require('./routes')); // Ensure this includes all your API routes
+// Routes
+app.use('/', require('./routes')); // Your API routes
 
-// Include Swagger UI routes
-app.use('/', swaggerRoutes);
+// Swagger UI setup
+app.use('/api-docs', routes/swagger.js); // Assumes swaggerRoutes handles Swagger UI
 
+// Initialize MongoDB connection
 mongodb.initDb((err) => {
   if (err) {
-    console.log(err);
+    console.error('MongoDB connection error:', err);
   } else {
+    // Start server
     app.listen(port, () => {
       console.log(`Connected to DB and listening on ${port}`);
     });
