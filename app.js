@@ -13,7 +13,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(session({
-  secret: process.env.GOOGLE_CLIENT_SECRET,
+  secret: process.env.SECRET,  // Ensure SECRET is set in your environment variables
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
