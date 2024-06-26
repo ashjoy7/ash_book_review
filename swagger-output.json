@@ -1,0 +1,219 @@
+{
+    "swagger": "2.0",
+    "info": {
+      "title": "Book Review API",
+      "description": "API for managing book reviews",
+      "version": "1.0.0"
+    },
+    "host": "book-review-api-7zsi.onrender.com",
+    "basePath": "/",
+    "schemes": [
+      "https"
+    ],
+    "paths": {
+      "/": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            }
+          }
+        }
+      },
+      "/swagger/api-docs": {
+        "get": {
+          "description": "",
+          "responses": {
+            "default": {
+              "description": ""
+            }
+          }
+        }
+      },
+      "/books/books": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "post": {
+          "description": "",
+          "responses": {
+            "201": {
+              "description": "Created"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/books/books/{id}": {
+        "get": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "put": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "delete": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/reviews/reviews": {
+        "get": {
+          "description": "",
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "post": {
+          "description": "",
+          "responses": {
+            "201": {
+              "description": "Created"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      },
+      "/reviews/reviews/{id}": {
+        "get": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "put": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        },
+        "delete": {
+          "description": "",
+          "parameters": [
+            {
+              "name": "id",
+              "in": "path",
+              "required": true,
+              "type": "string"
+            }
+          ],
+          "responses": {
+            "200": {
+              "description": "OK"
+            },
+            "404": {
+              "description": "Not Found"
+            },
+            "500": {
+              "description": "Internal Server Error"
+            }
+          }
+        }
+      }
+    }
+  }
