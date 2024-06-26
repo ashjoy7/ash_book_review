@@ -34,11 +34,10 @@ app.use((req, res, next) => {
 });
 
 // Define your routes here
-app.use('/', require('./routes'));
+app.use('/', require('./routes')); // Ensure this includes all your API routes
 
-app.options('*', (req, res) => {
-  res.status(200).send();
-});
+// Include Swagger UI routes
+app.use('/', swaggerRoutes);
 
 mongodb.initDb((err) => {
   if (err) {
