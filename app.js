@@ -1,3 +1,7 @@
+require('dotenv').config();
+
+console.log('SECRET:', process.env.SECRET); // Log the SECRET to verify
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const session = require('express-session');
@@ -5,7 +9,6 @@ const MongoStore = require('connect-mongo');
 const mongodb = require('./db/connect');
 const swaggerRoutes = require('./routes/swagger');
 const passport = require('./auth');
-require('dotenv').config();
 
 const port = process.env.PORT || 3000;
 const app = express();
@@ -13,7 +16,7 @@ const app = express();
 app.use(bodyParser.json());
 
 app.use(session({
-  secret: process.env.SECRET,  // Ensure SECRET is set in your environment variables
+  secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
