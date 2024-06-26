@@ -1,5 +1,6 @@
 const dotenv = require('dotenv');
-dotenv.config();
+dotenv.config({ path: './env/.env' });
+
 const MongoClient = require('mongodb').MongoClient;
 
 let _db;
