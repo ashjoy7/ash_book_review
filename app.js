@@ -41,7 +41,7 @@ app.UseStaticFiles();
 app.use('/', require('./routes')); // Your API routes
 
 // Swagger UI setup
-app.use(swaggerRoutes); // Use swaggerRoutes for Swagger UI
+app.use(swaggerDocument); // Use swaggerRoutes for Swagger UI
 
 // Initialize MongoDB connection
 mongodb.initDb((err) => {
