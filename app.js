@@ -34,9 +34,6 @@ app.use((req, res, next) => {
   next();
 });
 
-// Serve static files
-app.UseStaticFiles();
-
 // Routes
 app.use('/', require('./routes')); // Your API routes
 
