@@ -7,7 +7,7 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongodb = require('./db/connect');
-const swaggerRoutes = require('./routes/swagger');
+const swaggerRoutes = require('./routes/swagger'); // Import swaggerRoutes
 const passport = require('./auth');
 
 const port = process.env.PORT || 3000;
@@ -38,7 +38,7 @@ app.use((req, res, next) => {
 app.use('/', require('./routes')); // Your API routes
 
 // Swagger UI setup
-app.use('/api-docs', swagger); // Assumes swaggerRoutes handles Swagger UI
+app.use(swaggerRoutes); // Use swaggerRoutes for Swagger UI
 
 // Initialize MongoDB connection
 mongodb.initDb((err) => {
