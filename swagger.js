@@ -6,7 +6,7 @@ const doc = {
     description: 'API for managing book reviews',
   },
   host: 'ash-book-review.onrender.com/', // Update this with your actual host URL where your Node.js app is running
-  schemes: ['https'], // Update to ['https'] if your server uses HTTPS
+  schemes: ['http'], // Update to ['https'] if your server uses HTTPS
 };
 
 const outputFile = './swagger-output.json';
