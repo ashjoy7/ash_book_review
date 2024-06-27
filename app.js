@@ -1,5 +1,4 @@
 require('dotenv').config();
-
 console.log('SECRET:', process.env.SECRET); // Log the SECRET to verify
 
 const express = require('express');
@@ -34,17 +33,30 @@ app.use((req, res, next) => {
   next();
 });
 
+// Logging middleware
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 // Routes
 app.use('/', require('./routes')); // Your API routes
 
 // Swagger UI setup
 app.use(swaggerRoutes); // Use swaggerRoutes for Swagger UI
 
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error('Error:', err.stack);
+  res.status(500).send('Internal Server Error');
+});
+
 // Initialize MongoDB connection
 mongodb.initDb((err) => {
   if (err) {
     console.error('MongoDB connection error:', err);
   } else {
+    console.log('MongoDB connected successfully');
     // Start server
     app.listen(port, () => {
       console.log(`Connected to DB and listening on ${port}`);
