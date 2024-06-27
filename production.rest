@@ -1,0 +1,71 @@
+# PRODUCTION
+
+## Create a new book
+###
+POST https://book-review-api-7zsi.onrender.com/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "description": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism.",
+  "publishedYear": 1949,
+  "genre": "Science Fiction",
+  "rating": 4.6
+}
+
+## Get all books
+###
+GET https://book-review-api-7zsi.onrender.com/books HTTP/1.1
+
+## Get a book by ID
+###
+GET https://book-review-api-7zsi.onrender.com/books/{bookId}  HTTP/1.1
+
+## Update a book
+###
+PUT https://book-review-api-7zsi.onrender.com/books/{bookId} 
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "description": "BIG BROTHER IS WATCHING!!!",
+  "publishedYear": 1949,
+  "genre": "Science Fiction",
+  "rating": 4.6
+}
+
+## Delete a book
+###
+DELETE https://book-review-api-7zsi.onrender.com/books/{bookId}
+
+## Create a new review for a book
+###
+POST https://book-review-api-7zsi.onrender.com/books/{bookId}/reviews HTTP/1.1
+Content-Type: application/json
+
+{
+  "reviewer": "Jane Doe",
+  "content": "I loved this book!",
+  "rating": 5
+}
+
+## Get all reviews for a book
+###
+GET https://book-review-api-7zsi.onrender.com/books/{bookId}/reviews HTTP/1.1
+
+## Update a review for a book
+###
+PUT https://book-review-api-7zsi.onrender.com/books/{bookId}/reviews/{reviewId} 
+Content-Type: application/json
+
+{
+  "reviewer": "Jane Doe",
+  "content": "I didn't like this book.",
+  "rating": 2
+}
+
+## Delete a review for a book
+###
+DELETE https://book-review-api-7zsi.onrender.com/books/{bookId}/reviews/{reviewId}
