@@ -43,6 +43,7 @@ app.use((req, res, next) => {
 app.use('/', swaggerRoutes); // Use swaggerRoutes for Swagger UI
 
 // Routes
+app.use(express.static('routes'));
 app.use('/', require('./routes')); // Your API routes
 
 // Error handling middleware
