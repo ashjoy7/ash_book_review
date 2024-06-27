@@ -13,7 +13,21 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 // Middleware
-app.use(bodyParser.json());
+app
+  .use(bodyParser.json())
+  .use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader(
+        'Access-Control-Allow-Headers',
+        'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
+    );
+    res.setHeader('Content-Type', 'application/json');
+    res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE, OPTIONS');
+    next(); // Call next() after setting headers
+  });
+
+// Serve Swagger UI
+app.use('/', swaggerRoutes);
 
 app.use(session({
   secret: process.env.SECRET,
