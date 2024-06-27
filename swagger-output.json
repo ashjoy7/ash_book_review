@@ -5,7 +5,7 @@
     "description": "API for managing book reviews",
     "version": "1.0.0"
   },
-  "host": "ash-book-review.onrender.com/",
+  "host": "https://ash-book-review.onrender.com",
   "basePath": "/",
   "schemes": [
     "https"
