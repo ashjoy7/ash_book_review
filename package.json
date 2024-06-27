@@ -4,7 +4,9 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "swagger-autogen": "swagger-autogen"
+    "swagger-autogen": "swagger-autogen",
+    "generate-docs": "node swagger.js",
+    "start": "npm run generate-docs && node app.js"
   },
   "keywords": [],
   "author": "",
