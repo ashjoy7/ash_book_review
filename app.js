@@ -35,7 +35,7 @@ app.use((req, res, next) => {
 });
 
 // Serve static files
-app.use(express.static('public'));
+app.UseStaticFiles();
 
 // Routes
 app.use('/', require('./routes')); // Your API routes
