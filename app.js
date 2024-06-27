@@ -27,6 +27,7 @@ app
   });
 
 // Serve Swagger UI
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/', swaggerRoutes);
 
 app.use(session({
