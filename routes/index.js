@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
 
-router.use('/swagger', require('./swagger'));
 router.use('/books', require('./bookRoutes'));
 router.use('/reviews', require('./reviewRoutes'));
-router.use('/', require('./authRoutes'));
+router.use('/authors', require('./authorRoutes'));
+router.use('/genres', require('./genreRoutes'));
+router.use('/reviewers', require('./reviewerRoutes'));
 
-// Export the router first
 module.exports = router;
 
-// Define your root endpoint handler after exporting the router
+
 router.get('/', (req, res) => {
   res.send('Welcome to the Book Review API');
 });

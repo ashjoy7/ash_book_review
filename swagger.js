@@ -5,11 +5,11 @@ const doc = {
     title: 'Ash Book Review API',
     description: 'API for managing book reviews'
   },
-  host: 'ash-book-review.onrender.com', // Remove 'https://' as it's not needed here
-  schemes: ['https'] // Specify the schemes used by your API
+  host: 'ash-book-review.onrender.com', 
+  schemes: ['https'] 
 };
 
-const outputFile = './swagger-output.json'; // Adjust the path as needed
-const endpointsFiles = ['./routes/index.js']; // Adjust the path to your endpoint file(s)
+const outputFile = './swagger-output.json'; 
+const endpointsFiles = ['./routes/index.js']; 
 
 swaggerAutogen(outputFile, endpointsFiles, doc);

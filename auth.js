@@ -9,7 +9,6 @@ passport.use(
       callbackURL: 'http://localhost:3000/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done) => {
-      // Handle the user profile here, typically by finding or creating a user in your database
       return done(null, profile);
     }
   )

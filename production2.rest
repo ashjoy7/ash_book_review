@@ -1,0 +1,159 @@
+# PRODUCTION
+
+## Books
+
+### Create a new book
+POST https://ash-book-review.onrender.com/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "description": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism.",
+  "publishedYear": 1949,
+  "genre": "Science Fiction",
+  "rating": 4.6
+}
+
+### Get all books
+GET https://ash-book-review.onrender.com/books HTTP/1.1
+
+### Get a book by ID
+GET https://ash-book-review.onrender.com/books/{bookId}  HTTP/1.1
+
+### Update a book
+PUT https://ash-book-review.onrender.com/books/{bookId} 
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "author": "George Orwell",
+  "description": "BIG BROTHER IS WATCHING!!!",
+  "publishedYear": 1949,
+  "genre": "Science Fiction",
+  "rating": 4.6
+}
+
+### Delete a book
+DELETE https://ash-book-review.onrender.com/books/{bookId}
+
+## Reviews
+
+### Create a new review for a book
+POST https://ash-book-review.onrender.com/books/{bookId}/reviews HTTP/1.1
+Content-Type: application/json
+
+{
+  "reviewer": "Jane Doe",
+  "content": "I loved this book!",
+  "rating": 5
+}
+
+### Get all reviews for a book
+GET https://ash-book-review.onrender.com/books/{bookId}/reviews HTTP/1.1
+
+### Update a review for a book
+PUT https://ash-book-review.onrender.com/books/{bookId}/reviews/{reviewId} 
+Content-Type: application/json
+
+{
+  "reviewer": "Jane Doe",
+  "content": "I didn't like this book.",
+  "rating": 2
+}
+
+### Delete a review for a book
+DELETE https://ash-book-review.onrender.com/books/{bookId}/reviews/{reviewId}
+
+## Authors
+
+### Create a new author
+POST https://ash-book-review.onrender.com/authors HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "George Orwell",
+  "bio": "George Orwell was an English novelist, essayist, journalist and critic.",
+  "birthYear": 1903,
+  "deathYear": 1950
+}
+
+### Get all authors
+GET https://ash-book-review.onrender.com/authors HTTP/1.1
+
+### Get an author by ID
+GET https://ash-book-review.onrender.com/authors/{authorId} HTTP/1.1
+
+### Update an author
+PUT https://ash-book-review.onrender.com/authors/{authorId} 
+Content-Type: application/json
+
+{
+  "name": "George Orwell",
+  "bio": "George Orwell was a British writer and journalist.",
+  "birthYear": 1903,
+  "deathYear": 1950
+}
+
+### Delete an author
+DELETE https://ash-book-review.onrender.com/authors/{authorId}
+
+## Genres
+
+### Create a new genre
+POST https://ash-book-review.onrender.com/genres HTTP/1.1
+Content-Type: application/json
+
+{
+  "name": "Science Fiction",
+  "description": "A genre of speculative fiction that typically deals with imaginative and futuristic concepts."
+}
+
+### Get all genres
+GET https://ash-book-review.onrender.com/genres HTTP/1.1
+
+### Get a genre by ID
+GET https://ash-book-review.onrender.com/genres/{genreId} HTTP/1.1
+
+### Update a genre
+PUT https://ash-book-review.onrender.com/genres/{genreId} 
+Content-Type: application/json
+
+{
+  "name": "Science Fiction",
+  "description": "A genre that explores futuristic and imaginative concepts."
+}
+
+### Delete a genre
+DELETE https://ash-book-review.onrender.com/genres/{genreId}
+
+## Users
+
+### Create a new user
+POST https://ash-book-review.onrender.com/users HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "email": "johndoe@example.com",
+  "password": "securepassword"
+}
+
+### Get all users
+GET https://ash-book-review.onrender.com/users HTTP/1.1
+
+### Get a user by ID
+GET https://ash-book-review.onrender.com/users/{userId} HTTP/1.1
+
+### Update a user
+PUT https://ash-book-review.onrender.com/users/{userId} 
+Content-Type: application/json
+
+{
+  "username": "john_doe",
+  "email": "john_doe@example.com",
+  "password": "newsecurepassword"
+}
+
+### Delete a user
+DELETE https://ash-book-review.onrender.com/users/{userId}

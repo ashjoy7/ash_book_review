@@ -1,5 +1,5 @@
 require('dotenv').config();
-console.log('SECRET:', process.env.SECRET); // Log the SECRET to verify
+console.log('SECRET:', process.env.SECRET);
 
 const express = require('express');
 const cors = require('cors');
@@ -7,14 +7,13 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const mongodb = require('./db/connect');
-const swaggerRoutes = require('./routes/swagger'); // Import swaggerRoutes
+const swaggerRoutes = require('./routes/swagger');
 const passport = require('./auth');
 
 const port = process.env.PORT || 3000;
 const app = express();
 
 // Middleware
-
 app.use(cors());
 
 app
@@ -27,7 +26,7 @@ app
     );
     res.setHeader('Content-Type', 'application/json');
     res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    next(); // Call next() after setting headers
+    next();
   });
 
 // Serve Swagger UI
@@ -50,8 +49,7 @@ app.use((req, res, next) => {
 });
 
 // Routes
-app.use(express.static('routes'));
-app.use('/', require('./routes')); // Your API routes
+app.use('/', require('./routes'));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
