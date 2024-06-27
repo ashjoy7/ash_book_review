@@ -39,11 +39,11 @@ app.use((req, res, next) => {
   next();
 });
 
+// Swagger UI setup
+app.use('/', swaggerRoutes); // Use swaggerRoutes for Swagger UI
+
 // Routes
 app.use('/', require('./routes')); // Your API routes
-
-// Swagger UI setup
-app.use(swaggerRoutes); // Use swaggerRoutes for Swagger UI
 
 // Error handling middleware
 app.use((err, req, res, next) => {
