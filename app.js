@@ -2,8 +2,7 @@ require('dotenv').config();
 console.log('SECRET:', process.env.SECRET); // Log the SECRET to verify
 
 const express = require('express');
-const swaggerUi = require('swagger-ui-express');
-const swaggerDocument = require('./swagger-output.json'); // Adjust path as per your project structure
+const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo');
@@ -15,6 +14,9 @@ const port = process.env.PORT || 3000;
 const app = express();
 
 // Middleware
+
+app.use(cors());
+
 app
   .use(bodyParser.json())
   .use((req, res, next) => {
@@ -29,7 +31,6 @@ app
   });
 
 // Serve Swagger UI
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use('/', swaggerRoutes);
 
 app.use(session({
