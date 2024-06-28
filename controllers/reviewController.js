@@ -29,14 +29,18 @@ const createReview = async (req, res) => {
     }
 
     const review = {
-      reviewer: req.body.reviewer,
-      content: req.body.content,
-      rating: req.body.rating,
-      bookId: bookId
+      reviewer,
+      content,
+      rating,
+      bookId: new ObjectId(bookId) // Ensure bookId is stored as ObjectId
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
-    res.status(201).json(response.ops[0]);
+    if (response.result.ok === 1) {
+      res.status(201).json(response.ops[0]);
+    } else {
+      throw new Error('Failed to create review');
+    }
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
