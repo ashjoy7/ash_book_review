@@ -59,6 +59,7 @@ Content-Type: application/json
   "reviewer": "Jane Doe",
   "content": "I loved this book!",
   "rating": 5,
+  "bookId": "667df61cb67e7f2ce0abd79a"
 }
 
 

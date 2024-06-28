@@ -25,7 +25,7 @@ const createReview = async (req, res) => {
       return res.status(400).json({ error: 'Invalid bookId format' });
     }
 
-    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
+    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: ObjectId(bookId) });
     if (!bookExists) {
       console.log(`Book with ID ${bookId} not found`);
       return res.status(404).json({ error: 'Book not found' });
@@ -35,7 +35,7 @@ const createReview = async (req, res) => {
       reviewer,
       content,
       rating,
-      bookId: new ObjectId(bookId) // Ensure bookId is stored as ObjectId
+      bookId: ObjectId(bookId) // Ensure bookId is stored as ObjectId
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
