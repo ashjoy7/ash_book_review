@@ -59,12 +59,11 @@ Content-Type: application/json
   "reviewer": "Jane Doe",
   "content": "I loved this book!",
   "rating": 5,
-  "bookId": "667df61cb67e7f2ce0abd79a"
 }
 
 
 ### Get all reviews for a book
-GET https://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79areviews HTTP/1.1
+GET https://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79a/reviews HTTP/1.1
 
 ### Update a review for a book
 PUT https://ash-book-review.onrender.com/books/{bookId}/reviews/{reviewId} 
