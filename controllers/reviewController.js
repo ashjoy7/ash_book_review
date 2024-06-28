@@ -2,16 +2,15 @@ const mongodb = require('../db/connect');
 const { ObjectId } = require('mongodb');
 
 const getAllReviews = async (req, res, next) => {
-  const bookId = req.params.bookId; // Correctly extract bookId from request parameters
+  const { bookId } = req.params; // Correctly extract bookId from request parameters
   try {
-    const result = await mongodb.getDb().db().collection('reviews').find({ bookId: new ObjectId(bookId) }).toArray();
-    res.status(200).json(result);
+    const reviews = await mongodb.getDb().db().collection('reviews').find({ bookId: ObjectId.createFromHexString(bookId) }).toArray();
+    res.status(200).json(reviews);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 const createReview = async (req, res) => {
   const { reviewer, content, rating } = req.body;
@@ -23,7 +22,7 @@ const createReview = async (req, res) => {
 
   try {
     // Check if the bookId exists in the database
-    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
+    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: ObjectId.createFromHexString(bookId) });
     if (!bookExists) {
       return res.status(404).json({ error: 'Book not found' });
     }
@@ -32,7 +31,7 @@ const createReview = async (req, res) => {
       reviewer,
       content,
       rating,
-      bookId: new ObjectId(bookId) // Ensure bookId is stored as ObjectId
+      bookId: ObjectId.createFromTime(new Date().getTime()) // Create ObjectId based on time
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
@@ -48,10 +47,10 @@ const createReview = async (req, res) => {
 };
 
 const getReviewsById = async (req, res, next) => {
-  const bookId = new ObjectId(req.params.id); // Extract bookId from request parameters
+  const { bookId } = req.params; // Extract bookId from request parameters
   try {
-    const result = await mongodb.getDb().db().collection('reviews').find({ bookId }).toArray();
-    res.status(200).json(result);
+    const reviews = await mongodb.getDb().db().collection('reviews').find({ bookId: ObjectId.createFromHexString(bookId) }).toArray();
+    res.status(200).json(reviews);
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
@@ -59,7 +58,7 @@ const getReviewsById = async (req, res, next) => {
 };
 
 const updateReview = async (req, res) => {
-  const reviewId = new ObjectId(req.params.reviewId); // Correctly extract reviewId
+  const { reviewId } = req.params; // Correctly extract reviewId
   const { reviewer, content, rating } = req.body;
   if (!reviewer || !content || !rating) {
     return res.status(400).json({ error: 'Reviewer, content, and rating are required fields' });
@@ -70,7 +69,7 @@ const updateReview = async (req, res) => {
     rating
   };
   try {
-    const response = await mongodb.getDb().db().collection('reviews').replaceOne({ _id: reviewId }, updatedReview);
+    const response = await mongodb.getDb().db().collection('reviews').updateOne({ _id: ObjectId.createFromHexString(reviewId) }, { $set: updatedReview });
     if (response.modifiedCount === 0) {
       return res.status(404).json({ error: 'Review not found' });
     }
@@ -81,11 +80,10 @@ const updateReview = async (req, res) => {
   }
 };
 
-
 const deleteReview = async (req, res) => {
-  const reviewId = new ObjectId(req.params.id);
+  const { reviewId } = req.params;
   try {
-    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: reviewId });
+    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: ObjectId.createFromHexString(reviewId) });
     if (response.deletedCount === 0) {
       return res.status(404).json({ error: 'Review not found' });
     }
