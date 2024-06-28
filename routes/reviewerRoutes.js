@@ -9,7 +9,7 @@ router.get('/books/:bookId/reviews', reviewController.getAllReviews);
 router.get('/reviews/:reviewId', reviewController.getReviewsById);
 
 // Route to create a new review
-router.post('/reviews/:bookId', reviewController.createReview);
+router.post('/books/:bookId/reviews', reviewController.createReview);
 
 // Route to update a review by its ID
 router.put('/:reviewId', reviewController.updateReview);
