@@ -7,6 +7,7 @@ router.use('/reviews', require('./reviewRoutes'));
 router.use('/authors', require('./authorRoutes'));
 router.use('/genres', require('./genreRoutes'));
 router.use('/reviewers', require('./reviewerRoutes'));
+router.use('/', require('./authRoutes'));
 
 module.exports = router;
 

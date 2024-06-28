@@ -31,7 +31,7 @@ const createReview = async (req, res) => {
       reviewer: req.body.reviewer,
       content: req.body.content,
       rating: req.body.rating,
-      bookId: new ObjectId(bookId) // Ensure bookId is stored as ObjectId
+      bookId: bookId // Ensure bookId is stored as ObjectId
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
