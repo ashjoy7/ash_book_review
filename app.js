@@ -2,19 +2,14 @@ require('dotenv').config();
 console.log('SECRET:', process.env.SECRET);
 
 const express = require('express');
-const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
 const mongodb = require('./db/connect');
 const swaggerRoutes = require('./routes/swagger');
 const passport = require('./auth');
 
 const port = process.env.PORT || 3000;
 const app = express();
-
-// Middleware
-app.use(cors());
 
 app
   .use(bodyParser.json())
