@@ -16,29 +16,31 @@ const createReview = async (req, res) => {
   const { reviewer, content, rating } = req.body;
   const { bookId } = req.params;
 
-  if (!reviewer || !content || !rating) {
-    return res.status(400).json({ error: 'Reviewer, content, and rating are required fields' });
-  }
-
   try {
+    // Check if bookId is a valid ObjectId
     if (!ObjectId.isValid(bookId)) {
       return res.status(400).json({ error: 'Invalid bookId format' });
     }
 
-    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: ObjectId(bookId) });
+    // Check if the book with the specified _id exists
+    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
     if (!bookExists) {
       console.log(`Book with ID ${bookId} not found`);
       return res.status(404).json({ error: 'Book not found' });
     }
 
+    // Construct the review object
     const review = {
       reviewer,
       content,
       rating,
-      bookId: ObjectId(bookId) // Ensure bookId is stored as ObjectId
+      bookId: new ObjectId(bookId) // Convert bookId to ObjectId
     };
 
+    // Insert the review into the 'reviews' collection
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
+    
+    // Respond with the inserted review
     res.status(201).json(response.ops[0]);
   } catch (error) {
     console.error(error);
