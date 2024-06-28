@@ -12,7 +12,6 @@ const getAllReviews = async (req, res, next) => {
   }
 };
 
-
 const createReview = async (req, res) => {
   const { reviewer, content, rating } = req.body;
   const { bookId } = req.params; // Extract bookID from URL parameters
@@ -32,7 +31,7 @@ const createReview = async (req, res) => {
       reviewer: req.body.reviewer,
       content: req.body.content,
       rating: req.body.rating,
-      bookId: bookId
+      bookId: new ObjectId(bookId) // Ensure bookId is converted to ObjectId
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
@@ -76,7 +75,6 @@ const updateReview = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
 
 const deleteReview = async (req, res) => {
   const reviewId = new ObjectId(req.params.id);
