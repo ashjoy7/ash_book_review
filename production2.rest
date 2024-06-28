@@ -31,7 +31,7 @@ Content-Type: application/json
 GET https://ash-book-review.onrender.com/books HTTP/1.1
 
 ### Get a book by ID
-GET https://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79a  HTTP/1.1
+GET https://ash-book-review.onrender.com/books/667e292c583439130bdbf955  HTTP/1.1
 
 ### Update a book
 PUT https://ash-book-review.onrender.com/books/667cfb0e3c19f6eb1831e707 
@@ -52,7 +52,7 @@ DELETE https://ash-book-review.onrender.com/books/667cfb0e3c19f6eb1831e707
 ## Reviews
 
 ### Create a new review for a book
-POST https://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79a/reviews HTTP/1.1
+POST https://ash-book-review.onrender.com/reviews/667e292c583439130bdbf955 HTTP/1.1
 Content-Type: application/json
 
 {

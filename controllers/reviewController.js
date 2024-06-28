@@ -14,24 +14,28 @@ const getAllReviews = async (req, res, next) => {
 
 const createReview = async (req, res) => {
   const { reviewer, content, rating } = req.body;
-  const { bookId } = req.params; // Extract bookID from URL parameters
+  const { bookId } = req.params;
 
   if (!reviewer || !content || !rating) {
     return res.status(400).json({ error: 'Reviewer, content, and rating are required fields' });
   }
 
   try {
-    // Check if the bookId exists in the database
+    if (!ObjectId.isValid(bookId)) {
+      return res.status(400).json({ error: 'Invalid bookId format' });
+    }
+
     const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
     if (!bookExists) {
+      console.log(`Book with ID ${bookId} not found`);
       return res.status(404).json({ error: 'Book not found' });
     }
 
     const review = {
-      reviewer: req.body.reviewer,
-      content: req.body.content,
-      rating: req.body.rating,
-      bookId: bookId // Ensure bookId is stored as ObjectId
+      reviewer,
+      content,
+      rating,
+      bookId: new ObjectId(bookId) // Ensure bookId is stored as ObjectId
     };
 
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
@@ -41,6 +45,7 @@ const createReview = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 
 
