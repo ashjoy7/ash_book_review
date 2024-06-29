@@ -34,6 +34,7 @@ const createReview = async (req, res) => {
       reviewer,
       content,
       rating,
+      bookId: new ObjectId(bookId) // Link review to the specific book
     };
 
     // Insert the review into the 'reviews' collection
@@ -46,6 +47,7 @@ const createReview = async (req, res) => {
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
+
 
 const getReviewsById = async (req, res, next) => {
   const bookId = new ObjectId(req.params.id); // Extract bookId from request parameters

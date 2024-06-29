@@ -58,7 +58,7 @@ Content-Type: application/json
 {
   "reviewer": "Jane Doe",
   "content": "I loved this book!",
-  "rating": 5,
+  "rating": 5
 }
 
 
