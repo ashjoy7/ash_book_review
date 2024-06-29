@@ -6,8 +6,8 @@ POST https://ash-book-review.onrender.com/genres
 Content-Type: application/json
 
 {
-  "name": "Fantasy",
-  "description": "A genre of speculative fiction set in a fictional universe."
+  "name": "Science Fiction",
+  "description": "A genre of speculative fiction that explores imaginative scientific and technological concepts."
 }
 
 ###
