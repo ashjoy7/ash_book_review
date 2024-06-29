@@ -2,7 +2,7 @@
 
 # Create a new genre
 
-POST http://localhost:3000/genres
+POST https://ash-book-review.onrender.com/genres
 Content-Type: application/json
 
 {
@@ -14,7 +14,7 @@ Content-Type: application/json
 
 # Create a new author
 
-POST http://localhost:3000/authors
+POST https://ash-book-review.onrender.com/authors
 Content-Type: application/json
 
 {
@@ -31,7 +31,7 @@ Content-Type: application/json
 
 # Create a new book
 
-POST http://localhost:3000/books
+POST https://ash-book-review.onrender.com/books
 Content-Type: application/json
 
 {
@@ -46,7 +46,7 @@ Content-Type: application/json
 
 # Create a new reviewer
 
-POST http://localhost:3000/reviewers
+POST https://ash-book-review.onrender.com/reviewers
 Content-Type: application/json
 
 {
@@ -59,7 +59,7 @@ Content-Type: application/json
 
 # Create a new review
 
-POST http://localhost:3000/reviews
+POST https://ash-book-review.onrender.com/reviews
 Content-Type: application/json
 
 {
