@@ -3,13 +3,11 @@ const router = express.Router();
 const bookController = require('../controllers/bookController');
 const reviewController = require('../controllers/reviewController');
 
-router.get('/', bookController.getAllBooks);
-router.get('/:id', bookController.getBookById);
-router.post('/', bookController.createBook);
-router.put('/:id', bookController.updateBook);
-router.delete('/:id', bookController.deleteBook);
-
-// Route to handle adding reviews to a book
-router.post('/:id/reviews', reviewController.createReview);
+// Book routes
+router.get('/books', bookController.getAllBooks);
+router.get('/books/:bookId', bookController.getBookById);
+router.post('/books', bookController.createBook);
+router.put('/books/:bookId', bookController.updateBook);
+router.delete('/books/:bookId', bookController.deleteBook);
 
 module.exports = router;

@@ -1,106 +1,88 @@
-const mongodb = require('../db/connect');
-const { ObjectId } = require('mongodb');
+const { getDb } = require('../db/connect');
 
+// Get all reviews
 const getAllReviews = async (req, res, next) => {
-  const bookId = req.params.bookId; // Correctly extract bookId from request parameters
   try {
-    const result = await mongodb.getDb().db().collection('reviews').find({ bookId: new ObjectId(bookId) }).toArray();
-    res.status(200).json(result);
+    const db = getDb();
+    const reviews = await db.collection('Reviews').find().toArray();
+    res.json(reviews);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const createReview = async (req, res) => {
-  const { reviewer, content, rating } = req.body;
-  const { bookId } = req.params;
-
+// Get review by ID
+const getReviewById = async (req, res, next) => {
+  const reviewId = req.params.reviewId;
   try {
-    // Check if bookId is a valid ObjectId
-    if (!ObjectId.isValid(bookId)) {
-      return res.status(400).json({ error: 'Invalid bookId format' });
+    const db = getDb();
+    const review = await db.collection('Reviews').findOne({ reviewId });
+    if (!review) {
+      res.status(404).json({ message: 'Review not found' });
+    } else {
+      res.json(review);
     }
+  } catch (error) {
+    next(error);
+  }
+};
 
-    // Check if the book with the specified _id exists
-    const bookExists = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
-    if (!bookExists) {
-      console.log(`Book with ID ${bookId} not found`);
-      return res.status(404).json({ error: 'Book not found' });
-    }
-
-    // Construct the review object
-    const review = {
-      reviewer,
-      content,
+// Create a new review
+const createReview = async (req, res, next) => {
+  const { bookId, reviewerId, rating, reviewText, createdAt, updatedAt } = req.body;
+  try {
+    const db = getDb();
+    const result = await db.collection('Reviews').insertOne({
+      bookId,
+      reviewerId,
       rating,
-      bookId: new ObjectId(bookId) // Link review to the specific book
-    };
-
-    // Insert the review into the 'reviews' collection
-    const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
-    
-    // Respond with the inserted review
-    res.status(201).json(response.ops[0]);
+      reviewText,
+      createdAt,
+      updatedAt,
+    });
+    res.status(201).json(result.ops[0]);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-
-const getReviewsById = async (req, res, next) => {
-  const bookId = new ObjectId(req.params.id); // Extract bookId from request parameters
+// Update a review by ID
+const updateReview = async (req, res, next) => {
+  const reviewId = req.params.reviewId;
+  const updateFields = req.body;
   try {
-    const result = await mongodb.getDb().db().collection('reviews').find({ bookId }).toArray();
-    res.status(200).json(result);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const updateReview = async (req, res) => {
-  const reviewId = new ObjectId(req.params.reviewId); // Correctly extract reviewId
-  const { reviewer, content, rating } = req.body;
-  if (!reviewer || !content || !rating) {
-    return res.status(400).json({ error: 'Reviewer, content, and rating are required fields' });
-  }
-  const updatedReview = {
-    reviewer,
-    content,
-    rating
-  };
-  try {
-    const response = await mongodb.getDb().db().collection('reviews').replaceOne({ _id: reviewId }, updatedReview);
-    if (response.modifiedCount === 0) {
-      return res.status(404).json({ error: 'Review not found' });
+    const db = getDb();
+    const result = await db.collection('Reviews').updateOne({ reviewId }, { $set: updateFields });
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: 'Review not found' });
+    } else {
+      res.json({ message: 'Review updated successfully' });
     }
-    res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const deleteReview = async (req, res) => {
-  const reviewId = new ObjectId(req.params.id);
+// Delete a review by ID
+const deleteReview = async (req, res, next) => {
+  const reviewId = req.params.reviewId;
   try {
-    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: reviewId });
-    if (response.deletedCount === 0) {
-      return res.status(404).json({ error: 'Review not found' });
+    const db = getDb();
+    const result = await db.collection('Reviews').deleteOne({ reviewId });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: 'Review not found' });
+    } else {
+      res.json({ message: 'Review deleted successfully' });
     }
-    res.status(204).send();
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
 module.exports = {
   getAllReviews,
-  getReviewsById,
+  getReviewById,
   createReview,
   updateReview,
-  deleteReview
+  deleteReview,
 };
