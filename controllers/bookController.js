@@ -30,6 +30,7 @@ const getBookById = async (req, res) => {
 
 // Create a new book
 const createBook = async (req, res) => {
+  console.log('Request Body:', req.body);
   const book = {
     title: req.body.title,
     authorId: ObjectId(req.body.authorId), // Assuming authorId is stored as ObjectId in MongoDB
