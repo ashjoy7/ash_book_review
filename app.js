@@ -30,7 +30,7 @@ app
   });
 
 // Serve Swagger UI
-app.use('/', swaggerRoutes);
+app.use('/api-docs', swaggerRoutes);
 
 app.use(session({
   secret: process.env.SECRET,
