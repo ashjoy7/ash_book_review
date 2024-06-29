@@ -34,7 +34,7 @@ const createBook = async (req, res) => {
     title: req.body.title,
     authorId: ObjectId(req.body.authorId), // Assuming authorId is stored as ObjectId in MongoDB
     genreId: ObjectId(req.body.genreId),   // Assuming genreId is stored as ObjectId in MongoDB
-    publishedDate: req.body.publishedDate,
+    publishedYear: req.body.publishedYear,
     summary: req.body.summary,
   };
 
