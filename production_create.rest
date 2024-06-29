@@ -36,8 +36,8 @@ Content-Type: application/json
 
 {
   "title": "Harry Potter and the Philosopher's Stone",
-  "authorId": "1234567890",  // Replace with actual authorId from your database
-  "genreId": "0987654321",   // Replace with actual genreId from your database
+  "authorId": "66807da62f6d8b4c46075c1b",  // Replace with actual authorId from your database
+  "genreId": "66807bf2dfb7c808bf3238dd",   // Replace with actual genreId from your database
   "publishedDate": "1997-06-26",
   "summary": "The first book in the Harry Potter series."
 }
