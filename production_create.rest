@@ -1,0 +1,72 @@
+###
+
+# Create a new genre
+
+POST http://localhost:3000/genres
+Content-Type: application/json
+
+{
+  "name": "Fantasy",
+  "description": "A genre of speculative fiction set in a fictional universe."
+}
+
+###
+
+# Create a new author
+
+POST http://localhost:3000/authors
+Content-Type: application/json
+
+{
+  "firstName": "J.K.",
+  "lastName": "Rowling",
+  "bio": "Author of the Harry Potter series.",
+  "birthdate": "1965-07-31",
+  "deathdate": null,
+  "booksWritten": ["Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets"],
+  "quote": "It is our choices, Harry, that show what we truly are, far more than our abilities."
+}
+
+###
+
+# Create a new book
+
+POST http://localhost:3000/books
+Content-Type: application/json
+
+{
+  "title": "Harry Potter and the Philosopher's Stone",
+  "authorId": "1234567890",  // Replace with actual authorId from your database
+  "genreId": "0987654321",   // Replace with actual genreId from your database
+  "publishedDate": "1997-06-26",
+  "summary": "The first book in the Harry Potter series."
+}
+
+###
+
+# Create a new reviewer
+
+POST http://localhost:3000/reviewers
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+###
+
+# Create a new review
+
+POST http://localhost:3000/reviews
+Content-Type: application/json
+
+{
+  "bookId": "5edcec07e118f60d279792b5",  // Replace with actual bookId from your database
+  "reviewerId": "0987654321",            // Replace with actual reviewerId from your database
+  "rating": 5,
+  "reviewText": "I loved this book!",
+  "createdAt": "2024-06-29T12:00:00Z",
+  "updatedAt": "2024-06-29T12:00:00Z"
+}

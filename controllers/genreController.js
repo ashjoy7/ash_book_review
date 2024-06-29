@@ -1,67 +1,77 @@
-const mongodb = require('../db/connect');
-const { ObjectId } = require('mongodb');
+const { getDb } = require('../db/connect');
 
-const getAllGenres = async (req, res) => {
+// Get all genres
+const getAllGenres = async (req, res, next) => {
   try {
-    const result = await mongodb.getDb().db().collection('genres').find().toArray();
-    res.status(200).json(result);
+    const db = getDb();
+    const genres = await db.collection('Genres').find().toArray();
+    res.json(genres);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const getGenreById = async (req, res) => {
+// Get genre by ID
+const getGenreById = async (req, res, next) => {
+  const genreId = req.params.genreId;
   try {
-    const genreId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db().collection('genres').findOne({ _id: genreId });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const createGenre = async (req, res) => {
-  try {
-    const genre = {
-      name: req.body.name,
-      description: req.body.description
-    };
-    const response = await mongodb.getDb().db().collection('genres').insertOne(genre);
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const updateGenre = async (req, res) => {
-  try {
-    const genreId = new ObjectId(req.params.id);
-    const genre = {
-      name: req.body.name,
-      description: req.body.description
-    };
-    const response = await mongodb.getDb().db().collection('genres').replaceOne({ _id: genreId }, genre);
-    if (response.modifiedCount > 0) {
-      res.status(204).send();
+    const db = getDb();
+    const genre = await db.collection('Genres').findOne({ genreId });
+    if (!genre) {
+      res.status(404).json({ message: 'Genre not found' });
     } else {
-      res.status(500).json({ error: 'Some error occurred while updating the genre.' });
+      res.json(genre);
     }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const deleteGenre = async (req, res) => {
+// Create a new genre
+const createGenre = async (req, res, next) => {
+  const { name, description } = req.body;
   try {
-    const genreId = new ObjectId(req.params.id);
-    const response = await mongodb.getDb().db().collection('genres').deleteOne({ _id: genreId });
-    if (response.deletedCount > 0) {
-      res.status(204).send();
+    const db = getDb();
+    const result = await db.collection('Genres').insertOne({
+      name,
+      description,
+    });
+    res.status(201).json(result.ops[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update a genre by ID
+const updateGenre = async (req, res, next) => {
+  const genreId = req.params.genreId;
+  const updateFields = req.body;
+  try {
+    const db = getDb();
+    const result = await db.collection('Genres').updateOne({ genreId }, { $set: updateFields });
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: 'Genre not found' });
     } else {
-      res.status(500).json({ error: 'Some error occurred while deleting the genre.' });
+      res.json({ message: 'Genre updated successfully' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
+  }
+};
+
+// Delete a genre by ID
+const deleteGenre = async (req, res, next) => {
+  const genreId = req.params.genreId;
+  try {
+    const db = getDb();
+    const result = await db.collection('Genres').deleteOne({ genreId });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: 'Genre not found' });
+    } else {
+      res.json({ message: 'Genre deleted successfully' });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -70,5 +80,5 @@ module.exports = {
   getGenreById,
   createGenre,
   updateGenre,
-  deleteGenre
+  deleteGenre,
 };

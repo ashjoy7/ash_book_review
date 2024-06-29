@@ -52,6 +52,21 @@ DELETE https://ash-book-review.onrender.com/books/667cfb0e3c19f6eb1831e707
 ## Reviews
 
 ### Create a new review for a book
+
+POST http://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79a/reviews
+Content-Type: application/json
+
+{
+  "reviewerId": "1234567890",  // Replace with actual reviewerId from your database
+  "bookId": "667df61cb67e7f2ce0abd79a",
+  "rating": 5,
+  "reviewText": "I loved this book!",
+  "createdAt": "2024-06-29T12:00:00Z",
+  "updatedAt": "2024-06-29T12:00:00Z"
+}
+
+
+### Create a new review for a book
 POST https://ash-book-review.onrender.com/books/667df61cb67e7f2ce0abd79a/reviews HTTP/1.1
 Content-Type: application/json
 

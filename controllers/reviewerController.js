@@ -1,69 +1,78 @@
-const mongodb = require('../db/connect');
-const { ObjectId } = require('mongodb');
+const { getDb } = require('../db/connect');
 
-const getAllReviewers = async (req, res) => {
+// Get all reviewers
+const getAllReviewers = async (req, res, next) => {
   try {
-    const result = await mongodb.getDb().db().collection('reviewers').find().toArray();
-    res.status(200).json(result);
+    const db = getDb();
+    const reviewers = await db.collection('Reviewers').find().toArray();
+    res.json(reviewers);
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const getReviewerById = async (req, res) => {
+// Get reviewer by ID
+const getReviewerById = async (req, res, next) => {
+  const reviewerId = req.params.reviewerId;
   try {
-    const reviewerId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().db().collection('reviewers').findOne({ _id: reviewerId });
-    res.status(200).json(result);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const createReviewer = async (req, res) => {
-  try {
-    const reviewer = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email
-    };
-    const response = await mongodb.getDb().db().collection('reviewers').insertOne(reviewer);
-    res.status(201).json(response);
-  } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-};
-
-const updateReviewer = async (req, res) => {
-  try {
-    const reviewerId = new ObjectId(req.params.id);
-    const reviewer = {
-      firstName: req.body.firstName,
-      lastName: req.body.lastName,
-      email: req.body.email
-    };
-    const response = await mongodb.getDb().db().collection('reviewers').replaceOne({ _id: reviewerId }, reviewer);
-    if (response.modifiedCount > 0) {
-      res.status(204).send();
+    const db = getDb();
+    const reviewer = await db.collection('Reviewers').findOne({ reviewerId });
+    if (!reviewer) {
+      res.status(404).json({ message: 'Reviewer not found' });
     } else {
-      res.status(500).json({ error: 'Some error occurred while updating the reviewer.' });
+      res.json(reviewer);
     }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
   }
 };
 
-const deleteReviewer = async (req, res) => {
+// Create a new reviewer
+const createReviewer = async (req, res, next) => {
+  const { firstName, lastName, email } = req.body;
   try {
-    const reviewerId = new ObjectId(req.params.id);
-    const response = await mongodb.getDb().db().collection('reviewers').deleteOne({ _id: reviewerId });
-    if (response.deletedCount > 0) {
-      res.status(204).send();
+    const db = getDb();
+    const result = await db.collection('Reviewers').insertOne({
+      firstName,
+      lastName,
+      email,
+    });
+    res.status(201).json(result.ops[0]);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Update a reviewer by ID
+const updateReviewer = async (req, res, next) => {
+  const reviewerId = req.params.reviewerId;
+  const updateFields = req.body;
+  try {
+    const db = getDb();
+    const result = await db.collection('Reviewers').updateOne({ reviewerId }, { $set: updateFields });
+    if (result.modifiedCount === 0) {
+      res.status(404).json({ message: 'Reviewer not found' });
     } else {
-      res.status(500).json({ error: 'Some error occurred while deleting the reviewer.' });
+      res.json({ message: 'Reviewer updated successfully' });
     }
   } catch (error) {
-    res.status(500).json({ error: 'Internal Server Error' });
+    next(error);
+  }
+};
+
+// Delete a reviewer by ID
+const deleteReviewer = async (req, res, next) => {
+  const reviewerId = req.params.reviewerId;
+  try {
+    const db = getDb();
+    const result = await db.collection('Reviewers').deleteOne({ reviewerId });
+    if (result.deletedCount === 0) {
+      res.status(404).json({ message: 'Reviewer not found' });
+    } else {
+      res.json({ message: 'Reviewer deleted successfully' });
+    }
+  } catch (error) {
+    next(error);
   }
 };
 
@@ -72,5 +81,5 @@ module.exports = {
   getReviewerById,
   createReviewer,
   updateReviewer,
-  deleteReviewer
+  deleteReviewer,
 };
