@@ -6,8 +6,8 @@ POST https://ash-book-review.onrender.com/genres
 Content-Type: application/json
 
 {
-  "name": "Science Fiction",
-  "description": "A genre of speculative fiction that explores imaginative scientific and technological concepts."
+  "name": "Mystery",
+  "description": "A genre of fiction that revolves around solving a crime or puzzle."
 }
 
 ###
