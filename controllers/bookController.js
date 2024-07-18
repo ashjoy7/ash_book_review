@@ -33,8 +33,8 @@ const createBook = async (req, res) => {
   console.log('Request Body:', req.body);
   const book = {
     title: req.body.title,
-    authorId: ObjectId(req.body.authorId), // Assuming authorId is stored as ObjectId in MongoDB
-    genreId: ObjectId(req.body.genreId),   // Assuming genreId is stored as ObjectId in MongoDB
+    authorId: new ObjectId(req.body.authorId), // Ensure ObjectId is instantiated with new
+    genreId: new ObjectId(req.body.genreId),   // Ensure ObjectId is instantiated with new
     publishedYear: req.body.publishedYear,
     summary: req.body.summary,
   };
