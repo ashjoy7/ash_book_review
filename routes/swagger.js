@@ -10,7 +10,7 @@ if (!swaggerDocument) {
 }
 
 // Serve Swagger UI
-router.use('/', swaggerUi.serve);
-router.get('/', swaggerUi.setup(swaggerDocument));
+router.use('', swaggerUi.serve);
+router.get('', swaggerUi.setup(swaggerDocument));
 
 module.exports = router;
