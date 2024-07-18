@@ -6,7 +6,7 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const mongodb = require('./db/connect');
+const { connectDb } = require('./db/connect');
 const swaggerRoutes = require('./routes/swagger');
 const passport = require('./auth');
 
@@ -19,30 +19,29 @@ app.use('/api-docs', swaggerRoutes);
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
 
-app
-  .use(bodyParser.json())
-  .use((req, res, next) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
-    );
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Methods','GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    next();
-  });
+app.use((req, res, next) => {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
+  );
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  next();
+});
 
-//swagger
-
-
+// Session middleware configuration
+connectDb(); // Initialize MongoDB connection
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
   saveUninitialized: true,
-  store: MongoStore.create({ mongoUrl: process.env.MONGO_URI })
+  store: new MongoStore({ client: connectDb().client }) // Use connectDb().client for MongoDB client instance
 }));
 
+// Passport initialization
 app.use(passport.initialize());
 app.use(passport.session());
 
