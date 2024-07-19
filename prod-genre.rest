@@ -1,0 +1,39 @@
+### Create a new genre
+POST https://ash-book-review.onrender.com/genres
+Content-Type: application/json
+
+{
+  "name": "Science Fiction",
+  "description": "A genre of speculative fiction that explores imaginative and futuristic concepts."
+}
+
+###
+
+### Get all genres (after creating at least one)
+GET https://ash-book-review.onrender.com/genres
+Content-Type: application/json
+
+###
+
+### Get a single genre by ID (replace {id} with the actual ID from the creation response)
+GET https://ash-book-review.onrender.com/genres/{id}
+Content-Type: application/json
+
+###
+
+### Update an existing genre (replace {id} with the actual ID from the creation response)
+PUT https://ash-book-review.onrender.com/genres/{id}
+Content-Type: application/json
+
+{
+  "name": "Fantasy",
+  "description": "A genre of speculative fiction set in a fictional universe often inspired by mythology and folklore."
+}
+
+###
+
+### Delete a genre (replace {id} with the actual ID from the creation response)
+DELETE https://ash-book-review.onrender.com/genres/{id}
+Content-Type: application/json
+
+###

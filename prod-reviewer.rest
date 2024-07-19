@@ -1,0 +1,41 @@
+### Create a new reviewer
+POST https://ash-book-review.onrender.com/reviewers
+Content-Type: application/json
+
+{
+  "firstName": "John",
+  "lastName": "Doe",
+  "email": "john.doe@example.com"
+}
+
+###
+
+### Get all reviewers (after creating at least one)
+GET https://ash-book-review.onrender.com/reviewers
+Content-Type: application/json
+
+###
+
+### Get a single reviewer by ID (replace {id} with the actual ID from the creation response)
+GET https://ash-book-review.onrender.com/reviewers/{id}
+Content-Type: application/json
+
+###
+
+### Update an existing reviewer (replace {id} with the actual ID from the creation response)
+PUT https://ash-book-review.onrender.com/reviewers/{id}
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+###
+
+### Delete a reviewer (replace {id} with the actual ID from the creation response)
+DELETE https://ash-book-review.onrender.com/reviewers/{id}
+Content-Type: application/json
+
+###

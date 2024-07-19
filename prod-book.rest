@@ -1,0 +1,32 @@
+# Create a new book
+POST https://ash-book-review.onrender.com/books HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "authorId": "647d1f4d3f1b2a001f2c3d45",  // Replace with actual authorId
+  "genreId": "647d1f4d3f1b2a001f2c3d46",   // Replace with actual genreId
+  "publishedYear": 1949,
+  "summary": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism."
+}
+
+# Get all books
+GET https://ash-book-review.onrender.com/books HTTP/1.1
+
+# Get a book by ID
+GET https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1
+
+# Update a book
+PUT https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1
+Content-Type: application/json
+
+{
+  "title": "1984",
+  "authorId": "647d1f4d3f1b2a001f2c3d45",  // Replace with actual authorId
+  "genreId": "647d1f4d3f1b2a001f2c3d46",   // Replace with actual genreId
+  "publishedYear": 1949,
+  "summary": "BIG BROTHER IS WATCHING!!!"
+}
+
+# Delete a book
+DELETE https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1

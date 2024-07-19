@@ -1,0 +1,36 @@
+# Create a new author
+POST https://ash-book-review.onrender.com/authors HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "George",
+  "lastName": "Orwell",
+  "bio": "George Orwell was an English novelist, essayist, journalist, and critic.",
+  "birthDate": "1903-06-25",
+  "deathDate": "1950-01-21",
+  "booksWritten": ["647d1f4d3f1b2a001f2c3d45"],  // Replace with actual bookIds
+  "quote": "Big Brother is watching you."
+}
+
+# Get all authors
+GET https://ash-book-review.onrender.com/authors HTTP/1.1
+
+# Get an author by ID
+GET https://ash-book-review.onrender.com/authors/{authorId} HTTP/1.1
+
+# Update an author
+PUT https://ash-book-review.onrender.com/authors/{authorId} HTTP/1.1
+Content-Type: application/json
+
+{
+  "firstName": "George",
+  "lastName": "Orwell",
+  "bio": "George Orwell was a British writer and journalist.",
+  "birthDate": "1903-06-25",
+  "deathDate": "1950-01-21",
+  "booksWritten": ["647d1f4d3f1b2a001f2c3d45"],  // Replace with actual bookIds
+  "quote": "Big Brother is watching you."
+}
+
+# Delete an author
+DELETE https://ash-book-review.onrender.com/authors/{authorId} HTTP/1.1
