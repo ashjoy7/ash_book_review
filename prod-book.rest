@@ -4,10 +4,11 @@ Content-Type: application/json
 
 {
   "title": "1984",
-  "authorId": "647d1f4d3f1b2a001f2c3d45",  // Replace with actual authorId
-  "genreId": "647d1f4d3f1b2a001f2c3d46",   // Replace with actual genreId
+  "authorId": "64a0f06d0cfae412fe1e1b25",  // Replace with actual authorId
+  "description": "A dystopian social science fiction novel and cautionary tale.",
   "publishedYear": 1949,
-  "summary": "A dystopian social science fiction novel and cautionary tale about the dangers of totalitarianism."
+  "genre": "Dystopian",
+  "rating": 5
 }
 
 # Get all books
@@ -22,10 +23,11 @@ Content-Type: application/json
 
 {
   "title": "1984",
-  "authorId": "647d1f4d3f1b2a001f2c3d45",  // Replace with actual authorId
-  "genreId": "647d1f4d3f1b2a001f2c3d46",   // Replace with actual genreId
+  "authorId": "64a0f06d0cfae412fe1e1b25",  // Replace with actual authorId
+  "description": "A dystopian social science fiction novel and cautionary tale.",
   "publishedYear": 1949,
-  "summary": "BIG BROTHER IS WATCHING!!!"
+  "genre": "Dystopian",
+  "rating": 4
 }
 
 # Delete a book

@@ -1,41 +1,28 @@
-### Create a new reviewer
-POST https://ash-book-review.onrender.com/reviewers
+# Create a new reviewer
+POST https://ash-book-review.onrender.com/reviewers HTTP/1.1
 Content-Type: application/json
 
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "email": "john.doe@example.com"
+  "name": "John Doe",
+  "email": "john.doe@example.com",
+  "reviews": []  // Initially an empty array or can be populated with reviewIds
 }
 
-###
+# Get all reviewers
+GET https://ash-book-review.onrender.com/reviewers HTTP/1.1
 
-### Get all reviewers (after creating at least one)
-GET https://ash-book-review.onrender.com/reviewers
-Content-Type: application/json
+# Get a reviewer by ID
+GET https://ash-book-review.onrender.com/reviewers/{reviewerId} HTTP/1.1
 
-###
-
-### Get a single reviewer by ID (replace {id} with the actual ID from the creation response)
-GET https://ash-book-review.onrender.com/reviewers/{id}
-Content-Type: application/json
-
-###
-
-### Update an existing reviewer (replace {id} with the actual ID from the creation response)
-PUT https://ash-book-review.onrender.com/reviewers/{id}
+# Update a reviewer
+PUT https://ash-book-review.onrender.com/reviewers/{reviewerId} HTTP/1.1
 Content-Type: application/json
 
 {
-  "firstName": "Jane",
-  "lastName": "Doe",
-  "email": "jane.doe@example.com"
+  "name": "John Doe",
+  "email": "john.doe@newemail.com",
+  "reviews": ["64a0f06d0cfae412fe1e1b23"]  // Replace with actual reviewIds
 }
 
-###
-
-### Delete a reviewer (replace {id} with the actual ID from the creation response)
-DELETE https://ash-book-review.onrender.com/reviewers/{id}
-Content-Type: application/json
-
-###
+# Delete a reviewer
+DELETE https://ash-book-review.onrender.com/reviewers/{reviewerId} HTTP/1.1

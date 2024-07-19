@@ -18,21 +18,24 @@ app.use('/api-docs', swaggerRoutes);
 
 // Middleware
 app.use(cors());
-app.use(express.json());
+app.use(express.json()); // Built-in Express middleware for parsing JSON
 
-app
-  .use(bodyParser.json())
-  .use((req, res, next) => {
-    console.log('Middleware: Setting headers');
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader(
-        'Access-Control-Allow-Headers',
-        'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
-    );
-    res.setHeader('Content-Type', 'application/json');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
-    next();
-  });
+// Optional: body-parser not needed if using express.json()
+app.use(bodyParser.json()); // For parsing application/json
+app.use(bodyParser.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+
+// CORS and Header Middleware
+app.use((req, res, next) => {
+  console.log('Middleware: Setting headers');
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'Origin, X-Requested-With, Content-Type, Accept, Z-Key'
+  );
+  res.setHeader('Content-Type', 'application/json');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PATCH, PUT, DELETE, OPTIONS');
+  next();
+});
 
 // Session configuration
 app.use(session({

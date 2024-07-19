@@ -1,26 +1,30 @@
-# Create a new review for a book
-POST https://ash-book-review.onrender.com/books/{bookId}/reviews HTTP/1.1
+# Create a new review
+POST https://ash-book-review.onrender.com/reviews HTTP/1.1
 Content-Type: application/json
 
 {
-  "reviewerId": "1234567890",  // Replace with actual reviewerId
+  "bookId": "64a0f06d0cfae412fe1e1b23",  // Replace with actual bookId
+  "reviewerId": "64a0f06d0cfae412fe1e1b24",  // Replace with actual reviewerId
   "rating": 5,
-  "reviewText": "I loved this book!",
-  "createdAt": "2024-06-29T12:00:00Z",
-  "updatedAt": "2024-06-29T12:00:00Z"
+  "comment": "A brilliant book with deep insights."
 }
 
-# Get all reviews for a book
-GET https://ash-book-review.onrender.com/books/{bookId}/reviews HTTP/1.1
+# Get all reviews
+GET https://ash-book-review.onrender.com/reviews HTTP/1.1
 
-# Update a review for a book
-PUT https://ash-book-review.onrender.com/books/{bookId}/reviews/{reviewId} HTTP/1.1
+# Get a review by ID
+GET https://ash-book-review.onrender.com/reviews/{reviewId} HTTP/1.1
+
+# Update a review
+PUT https://ash-book-review.onrender.com/reviews/{reviewId} HTTP/1.1
 Content-Type: application/json
 
 {
-  "rating": 2,
-  "reviewText": "I didn't like this book."
+  "bookId": "64a0f06d0cfae412fe1e1b23",  // Replace with actual bookId
+  "reviewerId": "64a0f06d0cfae412fe1e1b24",  // Replace with actual reviewerId
+  "rating": 4,
+  "comment": "An insightful read with some flaws."
 }
 
-# Delete a review for a book
-DELETE https://ash-book-review.onrender.com/books/{bookId}/reviews/{reviewId} HTTP/1.1
+# Delete a review
+DELETE https://ash-book-review.onrender.com/reviews/{reviewId} HTTP/1.1

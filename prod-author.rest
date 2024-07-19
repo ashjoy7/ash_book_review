@@ -8,7 +8,7 @@ Content-Type: application/json
   "bio": "George Orwell was an English novelist, essayist, journalist, and critic.",
   "birthDate": "1903-06-25",
   "deathDate": "1950-01-21",
-  "booksWritten": ["647d1f4d3f1b2a001f2c3d45"],  // Replace with actual bookIds
+  "booksWritten": [],  // Replace with actual bookIds
   "quote": "Big Brother is watching you."
 }
 
@@ -28,7 +28,7 @@ Content-Type: application/json
   "bio": "George Orwell was a British writer and journalist.",
   "birthDate": "1903-06-25",
   "deathDate": "1950-01-21",
-  "booksWritten": ["647d1f4d3f1b2a001f2c3d45"],  // Replace with actual bookIds
+  "booksWritten": ["64a0f06d0cfae412fe1e1b26"],  // Replace with actual bookIds
   "quote": "Big Brother is watching you."
 }
 
