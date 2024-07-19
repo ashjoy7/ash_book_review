@@ -9,16 +9,19 @@ passport.use(
       callbackURL: 'https://ash-book-review.onrender.com/auth/google/callback'
     },
     (accessToken, refreshToken, profile, done) => {
+      console.log('Google Strategy Callback - Profile:', profile);
       return done(null, profile);
     }
   )
 );
 
 passport.serializeUser((user, done) => {
+  console.log('Serializing User:', user);
   done(null, user);
 });
 
 passport.deserializeUser((obj, done) => {
+  console.log('Deserializing User:', obj);
   done(null, obj);
 });
 
