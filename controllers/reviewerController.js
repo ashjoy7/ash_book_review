@@ -21,7 +21,10 @@ const getAllReviewers = async (req, res) => {
 const getReviewerById = async (req, res) => {
   const reviewerId = req.params.id;
 
+  console.log('Received request to get reviewer with ID:', reviewerId);
+
   if (!ObjectId.isValid(reviewerId)) {
+    console.log('Invalid ObjectId format:', reviewerId);
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
@@ -30,6 +33,7 @@ const getReviewerById = async (req, res) => {
     if (reviewer) {
       res.status(200).json(reviewer);
     } else {
+      console.log('Reviewer not found for ID:', reviewerId);
       res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
@@ -45,7 +49,10 @@ const createReviewer = async (req, res) => {
     email: req.body.email,
   };
 
+  console.log('Creating reviewer with data:', reviewer);
+
   if (!validateReviewerData(reviewer)) {
+    console.log('Invalid reviewer data:', reviewer);
     return res.status(400).json({ error: 'Invalid reviewer data' });
   }
 
@@ -54,6 +61,7 @@ const createReviewer = async (req, res) => {
     if (response.acknowledged) {
       res.status(201).json(response);
     } else {
+      console.log('Error occurred while creating the reviewer:', response);
       res.status(500).json({ error: 'Some error occurred while creating the reviewer.' });
     }
   } catch (error) {
@@ -70,11 +78,16 @@ const updateReviewer = async (req, res) => {
     email: req.body.email,
   };
 
+  console.log('Received request to update reviewer with ID:', reviewerId);
+  console.log('Update data:', updateFields);
+
   if (!ObjectId.isValid(reviewerId)) {
+    console.log('Invalid ObjectId format:', reviewerId);
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
   if (!validateReviewerData(updateFields)) {
+    console.log('Invalid reviewer data:', updateFields);
     return res.status(400).json({ error: 'Invalid reviewer data' });
   }
 
@@ -83,9 +96,12 @@ const updateReviewer = async (req, res) => {
       { _id: new ObjectId(reviewerId) },
       { $set: updateFields }
     );
+
     if (response.modifiedCount > 0) {
+      console.log('Reviewer updated successfully:', reviewerId);
       res.status(200).json(response);
     } else {
+      console.log('Reviewer not found or no changes made for ID:', reviewerId);
       res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
@@ -98,15 +114,21 @@ const updateReviewer = async (req, res) => {
 const deleteReviewer = async (req, res) => {
   const reviewerId = req.params.id;
 
+  console.log('Received request to delete reviewer with ID:', reviewerId);
+
   if (!ObjectId.isValid(reviewerId)) {
+    console.log('Invalid ObjectId format:', reviewerId);
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
   try {
     const response = await mongodb.getDb().db().collection('reviewers').deleteOne({ _id: new ObjectId(reviewerId) });
+
     if (response.deletedCount > 0) {
+      console.log('Reviewer deleted successfully:', reviewerId);
       res.status(200).json(response);
     } else {
+      console.log('Reviewer not found for ID:', reviewerId);
       res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
