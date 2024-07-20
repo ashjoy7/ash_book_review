@@ -1,0 +1,72 @@
+###
+
+# Create a new genre
+
+POST https://ash-book-review.onrender.com/genres
+Content-Type: application/json
+
+{
+  "name": "Mystery",
+  "description": "A genre of fiction that revolves around solving a crime or puzzle."
+}
+
+###
+
+# Create a new author
+
+POST https://ash-book-review.onrender.com/authors
+Content-Type: application/json
+
+{
+  "firstName": "J.K.",
+  "lastName": "Rowling",
+  "bio": "Author of the Harry Potter series.",
+  "birthdate": "1965-07-31",
+  "deathdate": null,
+  "booksWritten": ["Harry Potter and the Philosopher's Stone", "Harry Potter and the Chamber of Secrets"],
+  "quote": "It is our choices, Harry, that show what we truly are, far more than our abilities."
+}
+
+###
+
+# Create a new book
+
+POST https://ash-book-review.onrender.com/books
+Content-Type: application/json
+
+{
+  "title": "Harry Potter and the Philosopher's Stone",
+  "authorId": "66807da62f6d8b4c46075c1",  // Replace with actual authorId from your database
+  "genreId": "66807bf2dfb7c808bf3238dd",   // Replace with actual genreId from your database
+  "publishedYear": 1997,
+  "summary": "The first book in the Harry Potter series."
+}
+
+###
+
+# Create a new reviewer
+
+POST https://ash-book-review.onrender.com/reviewers
+Content-Type: application/json
+
+{
+  "firstName": "Jane",
+  "lastName": "Doe",
+  "email": "jane.doe@example.com"
+}
+
+###
+
+# Create a new review
+
+POST https://ash-book-review.onrender.com/reviews
+Content-Type: application/json
+
+{
+  "bookId": "5edcec07e118f60d279792b5",  // Replace with actual bookId from your database
+  "reviewerId": "0987654321",            // Replace with actual reviewerId from your database
+  "rating": 5,
+  "reviewText": "I loved this book!",
+  "createdAt": "2024-06-29T12:00:00Z",
+  "updatedAt": "2024-06-29T12:00:00Z"
+}

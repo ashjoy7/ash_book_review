@@ -3,8 +3,21 @@ const { ObjectId } = require('mongodb');
 
 // Helper function to validate review data
 const validateReviewData = (data) => {
-  return data && ObjectId.isValid(data.bookId) && ObjectId.isValid(data.reviewerId) && 
-         typeof data.rating === 'number' && typeof data.comment === 'string';
+  return data && typeof data.bookId === 'string' && typeof data.reviewerId === 'string' && typeof data.rating === 'number' && typeof data.comment === 'string';
+};
+
+// Helper function to update the number of reviews for a book
+const updateNumReviews = async (bookId) => {
+  try {
+    const reviewsCount = await mongodb.getDb().db().collection('reviews').countDocuments({ bookId: new ObjectId(bookId) });
+    await mongodb.getDb().db().collection('books').updateOne(
+      { _id: new ObjectId(bookId) },
+      { $set: { numReviews: reviewsCount } }
+    );
+  } catch (error) {
+    console.error('Error updating number of reviews:', error);
+    throw new Error('Error updating number of reviews');
+  }
 };
 
 // Get all reviews
@@ -27,7 +40,7 @@ const getReviewById = async (req, res) => {
   }
 
   try {
-    const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: ObjectId(reviewId) });
+    const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: new ObjectId(reviewId) });
     if (review) {
       res.status(200).json(review);
     } else {
@@ -55,7 +68,7 @@ const createReview = async (req, res) => {
   try {
     const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
     if (response.acknowledged) {
-      // Optionally, update book's number of reviews
+      // Update the number of reviews for the book
       await updateNumReviews(review.bookId);
       res.status(201).json(response);
     } else {
@@ -71,8 +84,6 @@ const createReview = async (req, res) => {
 const updateReview = async (req, res) => {
   const reviewId = req.params.id;
   const updateFields = {
-    bookId: req.body.bookId,
-    reviewerId: req.body.reviewerId,
     rating: req.body.rating,
     comment: req.body.comment,
   };
@@ -81,18 +92,20 @@ const updateReview = async (req, res) => {
     return res.status(400).json({ error: 'Invalid review ID' });
   }
 
-  if (!validateReviewData(updateFields)) {
+  if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
   try {
     const response = await mongodb.getDb().db().collection('reviews').updateOne(
-      { _id: ObjectId(reviewId) },
+      { _id: new ObjectId(reviewId) },
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
-      // Optionally, update book's number of reviews
-      await updateNumReviews(updateFields.bookId);
+      // Update the number of reviews for the book if the bookId is provided
+      if (req.body.bookId) {
+        await updateNumReviews(req.body.bookId);
+      }
       res.status(200).json(response);
     } else {
       res.status(404).json({ error: 'Review not found' });
@@ -112,13 +125,14 @@ const deleteReview = async (req, res) => {
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: ObjectId(reviewId) });
+    const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: new ObjectId(reviewId) });
+    if (!review) {
+      return res.status(404).json({ error: 'Review not found' });
+    }
+    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: new ObjectId(reviewId) });
     if (response.deletedCount > 0) {
-      // Optionally, update book's number of reviews
-      const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: ObjectId(reviewId) });
-      if (review) {
-        await updateNumReviews(review.bookId);
-      }
+      // Update the number of reviews for the book
+      await updateNumReviews(review.bookId);
       res.status(200).json(response);
     } else {
       res.status(404).json({ error: 'Review not found' });

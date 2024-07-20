@@ -1,152 +1,124 @@
 const mongodb = require('../db/connect');
 const { ObjectId } = require('mongodb');
 
-// Helper function to validate review data
-const validateReviewData = (data) => {
-  return data && typeof data.bookId === 'string' && typeof data.reviewerId === 'string' && typeof data.rating === 'number' && typeof data.comment === 'string';
+// Helper function to validate reviewer data
+const validateReviewerData = (data) => {
+  return data && typeof data.name === 'string' && typeof data.email === 'string';
 };
 
-// Helper function to update the number of reviews for a book
-const updateNumReviews = async (bookId) => {
+// Get all reviewers
+const getAllReviewers = async (req, res) => {
   try {
-    const reviewsCount = await mongodb.getDb().db().collection('reviews').countDocuments({ bookId: new ObjectId(bookId) });
-    await mongodb.getDb().db().collection('books').updateOne(
-      { _id: new ObjectId(bookId) },
-      { $set: { numReviews: reviewsCount } }
-    );
+    const reviewers = await mongodb.getDb().db().collection('reviewers').find().toArray();
+    res.status(200).json(reviewers);
   } catch (error) {
-    console.error('Error updating number of reviews:', error);
-    throw new Error('Error updating number of reviews');
-  }
-};
-
-// Get all reviews
-const getAllReviews = async (req, res) => {
-  try {
-    const reviews = await mongodb.getDb().db().collection('reviews').find().toArray();
-    res.status(200).json(reviews);
-  } catch (error) {
-    console.error('Error fetching reviews:', error);
+    console.error('Error fetching reviewers:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Get a single review by ID
-const getReviewById = async (req, res) => {
-  const reviewId = req.params.id;
+// Get a single reviewer by ID
+const getReviewerById = async (req, res) => {
+  const reviewerId = req.params.id;
 
-  if (!ObjectId.isValid(reviewId)) {
-    return res.status(400).json({ error: 'Invalid review ID' });
+  if (!ObjectId.isValid(reviewerId)) {
+    return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
   try {
-    const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: new ObjectId(reviewId) });
-    if (review) {
-      res.status(200).json(review);
+    const reviewer = await mongodb.getDb().db().collection('reviewers').findOne({ _id: ObjectId(reviewerId) });
+    if (reviewer) {
+      res.status(200).json(reviewer);
     } else {
-      res.status(404).json({ error: 'Review not found' });
+      res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
-    console.error(`Error fetching review with id ${reviewId}:`, error);
+    console.error(`Error fetching reviewer with id ${reviewerId}:`, error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Create a new review
-const createReview = async (req, res) => {
-  const review = {
-    bookId: req.body.bookId,
-    reviewerId: req.body.reviewerId,
-    rating: req.body.rating,
-    comment: req.body.comment,
+// Create a new reviewer
+const createReviewer = async (req, res) => {
+  const reviewer = {
+    name: req.body.name,
+    email: req.body.email,
   };
 
-  if (!validateReviewData(review)) {
-    return res.status(400).json({ error: 'Invalid review data' });
+  if (!validateReviewerData(reviewer)) {
+    return res.status(400).json({ error: 'Invalid reviewer data' });
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('reviews').insertOne(review);
+    const response = await mongodb.getDb().db().collection('reviewers').insertOne(reviewer);
     if (response.acknowledged) {
-      // Update the number of reviews for the book
-      await updateNumReviews(review.bookId);
       res.status(201).json(response);
     } else {
-      res.status(500).json({ error: 'Some error occurred while creating the review.' });
+      res.status(500).json({ error: 'Some error occurred while creating the reviewer.' });
     }
   } catch (error) {
-    console.error('Error creating review:', error);
+    console.error('Error creating reviewer:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Update an existing review
-const updateReview = async (req, res) => {
-  const reviewId = req.params.id;
+// Update an existing reviewer
+const updateReviewer = async (req, res) => {
+  const reviewerId = req.params.id;
   const updateFields = {
-    rating: req.body.rating,
-    comment: req.body.comment,
+    name: req.body.name,
+    email: req.body.email,
   };
 
-  if (!ObjectId.isValid(reviewId)) {
-    return res.status(400).json({ error: 'Invalid review ID' });
+  if (!ObjectId.isValid(reviewerId)) {
+    return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
-  if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
-    return res.status(400).json({ error: 'Invalid review data' });
+  if (!validateReviewerData(updateFields)) {
+    return res.status(400).json({ error: 'Invalid reviewer data' });
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('reviews').updateOne(
-      { _id: new ObjectId(reviewId) },
+    const response = await mongodb.getDb().db().collection('reviewers').updateOne(
+      { _id: ObjectId(reviewerId) },
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
-      // Update the number of reviews for the book if the bookId is provided
-      if (req.body.bookId) {
-        await updateNumReviews(req.body.bookId);
-      }
       res.status(200).json(response);
     } else {
-      res.status(404).json({ error: 'Review not found' });
+      res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
-    console.error(`Error updating review with id ${reviewId}:`, error);
+    console.error(`Error updating reviewer with id ${reviewerId}:`, error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
-// Delete a review
-const deleteReview = async (req, res) => {
-  const reviewId = req.params.id;
+// Delete a reviewer
+const deleteReviewer = async (req, res) => {
+  const reviewerId = req.params.id;
 
-  if (!ObjectId.isValid(reviewId)) {
-    return res.status(400).json({ error: 'Invalid review ID' });
+  if (!ObjectId.isValid(reviewerId)) {
+    return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
   try {
-    const review = await mongodb.getDb().db().collection('reviews').findOne({ _id: new ObjectId(reviewId) });
-    if (!review) {
-      return res.status(404).json({ error: 'Review not found' });
-    }
-    const response = await mongodb.getDb().db().collection('reviews').deleteOne({ _id: new ObjectId(reviewId) });
+    const response = await mongodb.getDb().db().collection('reviewers').deleteOne({ _id: ObjectId(reviewerId) });
     if (response.deletedCount > 0) {
-      // Update the number of reviews for the book
-      await updateNumReviews(review.bookId);
       res.status(200).json(response);
     } else {
-      res.status(404).json({ error: 'Review not found' });
+      res.status(404).json({ error: 'Reviewer not found' });
     }
   } catch (error) {
-    console.error(`Error deleting review with id ${reviewId}:`, error);
+    console.error(`Error deleting reviewer with id ${reviewerId}:`, error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
 
 module.exports = {
-  getAllReviews,
-  getReviewById,
-  createReview,
-  updateReview,
-  deleteReview,
+  getAllReviewers,
+  getReviewerById,
+  createReviewer,
+  updateReviewer,
+  deleteReviewer,
 };
