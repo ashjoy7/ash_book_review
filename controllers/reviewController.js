@@ -4,10 +4,10 @@ const { ObjectId } = require('mongodb');
 // Helper function to validate review data
 const validateReviewData = (data) => {
   return data &&
-    typeof data.bookId === 'string' && data.bookId.trim() !== '' &&
-    typeof data.reviewerId === 'string' && data.reviewerId.trim() !== '' &&
-    typeof data.rating === 'number' && data.rating >= 1 && data.rating <= 5 &&
-    typeof data.comment === 'string' && data.comment.trim() !== '';
+    typeof data.bookId === 'string' &&
+    typeof data.reviewerId === 'string' &&
+    typeof data.rating === 'number' &&
+    typeof data.comment === 'string';
 };
 
 // Helper function to update the number of reviews for a book
@@ -21,6 +21,36 @@ const updateNumReviews = async (bookId) => {
   } catch (error) {
     console.error('Error updating number of reviews:', error);
     throw new Error('Error updating number of reviews');
+  }
+};
+
+// Check if a book exists
+const checkBookExists = async (bookId) => {
+  try {
+    const book = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
+    if (!book) {
+      console.log(`Book with ID ${bookId} does not exist`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error checking if book exists:', error);
+    throw new Error('Error checking if book exists');
+  }
+};
+
+// Check if a reviewer exists
+const checkReviewerExists = async (reviewerId) => {
+  try {
+    const reviewer = await mongodb.getDb().db().collection('reviewers').findOne({ _id: new ObjectId(reviewerId) });
+    if (!reviewer) {
+      console.log(`Reviewer with ID ${reviewerId} does not exist`);
+      return false;
+    }
+    return true;
+  } catch (error) {
+    console.error('Error checking if reviewer exists:', error);
+    throw new Error('Error checking if reviewer exists');
   }
 };
 
@@ -68,8 +98,15 @@ const createReview = async (req, res) => {
   console.log('Creating review with data:', review); // Log review data
 
   if (!validateReviewData(review)) {
-    console.log('Validation failed for review data:', review); // Log validation failure
     return res.status(400).json({ error: 'Invalid review data' });
+  }
+
+  // Check if book and reviewer exist
+  const bookExists = await checkBookExists(review.bookId);
+  const reviewerExists = await checkReviewerExists(review.reviewerId);
+
+  if (!bookExists || !reviewerExists) {
+    return res.status(400).json({ error: 'Book or reviewer does not exist' });
   }
 
   try {
@@ -105,8 +142,15 @@ const updateReview = async (req, res) => {
 
   // Validate review data
   if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
-    console.log('Validation failed for review data:', updateFields); // Log validation failure
     return res.status(400).json({ error: 'Invalid review data' });
+  }
+
+  // Check if book and reviewer exist
+  const bookExists = await checkBookExists(updateFields.bookId);
+  const reviewerExists = await checkReviewerExists(req.body.reviewerId);
+
+  if (!bookExists || !reviewerExists) {
+    return res.status(400).json({ error: 'Book or reviewer does not exist' });
   }
 
   try {
