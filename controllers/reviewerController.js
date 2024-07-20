@@ -26,7 +26,7 @@ const getReviewerById = async (req, res) => {
   }
 
   try {
-    const reviewer = await mongodb.getDb().db().collection('reviewers').findOne({ _id: ObjectId(reviewerId) });
+    const reviewer = await mongodb.getDb().db().collection('reviewers').findOne({ _id: new ObjectId(reviewerId) });
     if (reviewer) {
       res.status(200).json(reviewer);
     } else {
@@ -80,7 +80,7 @@ const updateReviewer = async (req, res) => {
 
   try {
     const response = await mongodb.getDb().db().collection('reviewers').updateOne(
-      { _id: ObjectId(reviewerId) },
+      { _id: new ObjectId(reviewerId) },
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
@@ -103,7 +103,7 @@ const deleteReviewer = async (req, res) => {
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('reviewers').deleteOne({ _id: ObjectId(reviewerId) });
+    const response = await mongodb.getDb().db().collection('reviewers').deleteOne({ _id: new ObjectId(reviewerId) });
     if (response.deletedCount > 0) {
       res.status(200).json(response);
     } else {

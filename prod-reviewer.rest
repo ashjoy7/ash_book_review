@@ -27,4 +27,4 @@ Content-Type: application/json
 
 # Delete a reviewer
 ###
-DELETE https://ash-book-review.onrender.com/reviewers/669b0c55baea3bce90b95621 HTTP/1.1
+DELETE https://ash-book-review.onrender.com/reviewers/669b10327f1f895083df1136 HTTP/1.1
