@@ -27,4 +27,4 @@ Content-Type: application/json
 
 # Delete a genre
 ###
-DELETE https://ash-book-review.onrender.com/genres/{id} HTTP/1.1
+DELETE https://ash-book-review.onrender.com/genres/669ac83e904c2cede6d677c2 HTTP/1.1

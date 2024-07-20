@@ -13,7 +13,7 @@ Content-Type: application/json
 {
   "title": "1984",
   "authorName": "George Orwell",
-  "genreId": "605c72ef2f8fb814a8bde896",
+  "genre": "Dystopian",  
   "publishedYear": 1949,
   "summary": "A dystopian social science fiction novel and cautionary tale about the future.",
   "quote": "Big Brother is watching you.",
@@ -28,7 +28,7 @@ Content-Type: application/json
 {
   "title": "1984",
   "authorName": "George Orwell",
-  "genreId": "605c72ef2f8fb814a8bde896",
+  "genre": "Dystopian", 
   "publishedYear": 1949,
   "summary": "An updated summary of the book.",
   "quote": "Big Brother is watching you.",

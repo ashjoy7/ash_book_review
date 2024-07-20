@@ -5,7 +5,7 @@ const { ObjectId } = require('mongodb');
 const validateBookData = (data) => {
   return data && typeof data.title === 'string' && typeof data.authorName === 'string' && 
          typeof data.summary === 'string' && typeof data.quote === 'string' &&
-         typeof data.publishedYear === 'number' && typeof data.genreId === 'string';
+         typeof data.publishedYear === 'number' && typeof data.genre === 'string';
 };
 
 // Helper function to update number of reviews
@@ -56,7 +56,7 @@ const createBook = async (req, res) => {
   const book = {
     title: req.body.title,
     authorName: req.body.authorName,
-    genreId: req.body.genreId,
+    genre: req.body.genre,
     publishedYear: req.body.publishedYear,
     summary: req.body.summary,
     quote: req.body.quote,
@@ -86,7 +86,7 @@ const updateBook = async (req, res) => {
   const updateFields = {
     title: req.body.title,
     authorName: req.body.authorName,
-    genreId: req.body.genreId,
+    genre: req.body.genre,
     publishedYear: req.body.publishedYear,
     summary: req.body.summary,
     quote: req.body.quote,
