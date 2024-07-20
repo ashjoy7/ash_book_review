@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const reviewController = require('../controllers/reviewController');
+const reviewController = require('../controllers/reviewController'); // Ensure this path is correct
 
 // Define routes relative to '/reviews'
 router.get('/', reviewController.getAllReviews);
