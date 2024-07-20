@@ -4,10 +4,10 @@ const { ObjectId } = require('mongodb');
 // Helper function to validate review data
 const validateReviewData = (data) => {
   return data &&
-    typeof data.bookId === 'string' &&
-    typeof data.reviewerId === 'string' &&
-    typeof data.rating === 'number' &&
-    typeof data.comment === 'string';
+    typeof data.bookId === 'string' && data.bookId.trim() !== '' &&
+    typeof data.reviewerId === 'string' && data.reviewerId.trim() !== '' &&
+    typeof data.rating === 'number' && data.rating >= 1 && data.rating <= 5 &&
+    typeof data.comment === 'string' && data.comment.trim() !== '';
 };
 
 // Helper function to update the number of reviews for a book
@@ -68,6 +68,7 @@ const createReview = async (req, res) => {
   console.log('Creating review with data:', review); // Log review data
 
   if (!validateReviewData(review)) {
+    console.log('Validation failed for review data:', review); // Log validation failure
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
@@ -104,6 +105,7 @@ const updateReview = async (req, res) => {
 
   // Validate review data
   if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
+    console.log('Validation failed for review data:', updateFields); // Log validation failure
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
