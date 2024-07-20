@@ -3,11 +3,26 @@ const { ObjectId } = require('mongodb');
 
 // Helper function to validate review data
 const validateReviewData = (data) => {
-  return data &&
-    typeof data.bookId === 'string' &&
-    typeof data.reviewerId === 'string' &&
-    typeof data.rating === 'number' &&
-    typeof data.comment === 'string';
+  if (!data) {
+    console.log('No review data provided');
+    return false;
+  }
+  
+  const isValid = typeof data.bookId === 'string' &&
+                   typeof data.reviewerId === 'string' &&
+                   typeof data.rating === 'number' &&
+                   typeof data.comment === 'string';
+
+  if (!isValid) {
+    console.log('Invalid review data:', {
+      bookId: typeof data.bookId,
+      reviewerId: typeof data.reviewerId,
+      rating: typeof data.rating,
+      comment: typeof data.comment
+    });
+  }
+
+  return isValid;
 };
 
 // Helper function to update the number of reviews for a book
@@ -18,6 +33,7 @@ const updateNumReviews = async (bookId) => {
       { _id: new ObjectId(bookId) },
       { $set: { numReviews: reviewsCount } }
     );
+    console.log(`Updated number of reviews for book ID ${bookId} to ${reviewsCount}`);
   } catch (error) {
     console.error('Error updating number of reviews:', error);
     throw new Error('Error updating number of reviews');
@@ -70,6 +86,7 @@ const getReviewById = async (req, res) => {
   const reviewId = req.params.id;
 
   if (!ObjectId.isValid(reviewId)) {
+    console.log(`Invalid review ID format: ${reviewId}`);
     return res.status(400).json({ error: 'Invalid review ID' });
   }
 
@@ -98,6 +115,7 @@ const createReview = async (req, res) => {
   console.log('Creating review with data:', review); // Log review data
 
   if (!validateReviewData(review)) {
+    console.log('Invalid review data:', review);
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
@@ -106,6 +124,7 @@ const createReview = async (req, res) => {
   const reviewerExists = await checkReviewerExists(review.reviewerId);
 
   if (!bookExists || !reviewerExists) {
+    console.log(`Book or reviewer does not exist. Book Exists: ${bookExists}, Reviewer Exists: ${reviewerExists}`);
     return res.status(400).json({ error: 'Book or reviewer does not exist' });
   }
 
@@ -116,6 +135,7 @@ const createReview = async (req, res) => {
       await updateNumReviews(review.bookId);
       res.status(201).json(response);
     } else {
+      console.log('Error occurred while creating the review:', response);
       res.status(500).json({ error: 'Some error occurred while creating the review.' });
     }
   } catch (error) {
@@ -131,25 +151,29 @@ const updateReview = async (req, res) => {
     rating: req.body.rating,
     comment: req.body.comment,
     bookId: req.body.bookId, // Ensure bookId is included for updating numReviews
+    reviewerId: req.body.reviewerId, // Include reviewerId for existence check
   };
 
   console.log('Updating review with id:', reviewId, 'and data:', updateFields); // Log review ID and update fields
 
   // Validate reviewId
   if (!ObjectId.isValid(reviewId)) {
+    console.log('Invalid ObjectId format:', reviewId);
     return res.status(400).json({ error: 'Invalid review ID' });
   }
 
   // Validate review data
-  if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
+  if (!validateReviewData(updateFields)) {
+    console.log('Invalid review data:', updateFields);
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
   // Check if book and reviewer exist
   const bookExists = await checkBookExists(updateFields.bookId);
-  const reviewerExists = await checkReviewerExists(req.body.reviewerId);
+  const reviewerExists = await checkReviewerExists(updateFields.reviewerId);
 
   if (!bookExists || !reviewerExists) {
+    console.log(`Book or reviewer does not exist. Book Exists: ${bookExists}, Reviewer Exists: ${reviewerExists}`);
     return res.status(400).json({ error: 'Book or reviewer does not exist' });
   }
 
@@ -178,6 +202,7 @@ const deleteReview = async (req, res) => {
   const reviewId = req.params.id;
 
   if (!ObjectId.isValid(reviewId)) {
+    console.log('Invalid ObjectId format:', reviewId);
     return res.status(400).json({ error: 'Invalid review ID' });
   }
 
