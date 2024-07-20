@@ -4,7 +4,7 @@ Content-Type: application/json
 
 {
   "title": "1984",
-  "authorId": "64a0f06d0cfae412fe1e1b25",  // Replace with actual authorId
+  "authorId": "64a0f06d0cfae412fe1e1b25",
   "description": "A dystopian social science fiction novel and cautionary tale.",
   "publishedYear": 1949,
   "genre": "Dystopian",

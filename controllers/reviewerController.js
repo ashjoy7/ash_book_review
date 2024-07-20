@@ -6,21 +6,6 @@ const validateReviewerData = (data) => {
   return data && typeof data.name === 'string' && typeof data.email === 'string';
 };
 
-// Helper function to check if an ObjectId is valid
-const isValidObjectId = (id) => {
-  return ObjectId.isValid(id);
-};
-
-// Helper function to update reviews
-const updateReviewsField = async (reviewerId, reviewId) => {
-  if (isValidObjectId(reviewerId) && isValidObjectId(reviewId)) {
-    await mongodb.getDb().db().collection('reviewers').updateOne(
-      { _id: ObjectId(reviewerId) },
-      { $addToSet: { reviews: ObjectId(reviewId) } }
-    );
-  }
-};
-
 // Get all reviewers
 const getAllReviewers = async (req, res) => {
   try {
@@ -36,7 +21,7 @@ const getAllReviewers = async (req, res) => {
 const getReviewerById = async (req, res) => {
   const reviewerId = req.params.id;
 
-  if (!isValidObjectId(reviewerId)) {
+  if (!ObjectId.isValid(reviewerId)) {
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
@@ -58,7 +43,6 @@ const createReviewer = async (req, res) => {
   const reviewer = {
     name: req.body.name,
     email: req.body.email,
-    reviews: req.body.reviews || [],
   };
 
   if (!validateReviewerData(reviewer)) {
@@ -84,10 +68,9 @@ const updateReviewer = async (req, res) => {
   const updateFields = {
     name: req.body.name,
     email: req.body.email,
-    reviews: req.body.reviews,
   };
 
-  if (!isValidObjectId(reviewerId)) {
+  if (!ObjectId.isValid(reviewerId)) {
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 
@@ -115,7 +98,7 @@ const updateReviewer = async (req, res) => {
 const deleteReviewer = async (req, res) => {
   const reviewerId = req.params.id;
 
-  if (!isValidObjectId(reviewerId)) {
+  if (!ObjectId.isValid(reviewerId)) {
     return res.status(400).json({ error: 'Invalid reviewer ID' });
   }
 

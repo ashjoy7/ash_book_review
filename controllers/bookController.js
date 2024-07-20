@@ -1,23 +1,20 @@
 const mongodb = require('../db/connect');
 const { ObjectId } = require('mongodb');
 
-// Helper function to check if an ObjectId is valid
-const isValidObjectId = (id) => {
-  return ObjectId.isValid(id);
+// Helper function to validate book data
+const validateBookData = (data) => {
+  return data && typeof data.title === 'string' && typeof data.authorName === 'string' && 
+         typeof data.summary === 'string' && typeof data.quote === 'string' &&
+         typeof data.publishedYear === 'number' && typeof data.genreId === 'string';
 };
 
-// Helper function to check existence of a referenced document
-const checkExistence = async (collectionName, id) => {
-  const result = await mongodb.getDb().db().collection(collectionName).findOne({ _id: ObjectId(id) });
-  return result !== null;
-};
-
-// Helper function to add book ID to author's booksWritten field
-const addBookToAuthor = async (authorId, bookId) => {
-  if (isValidObjectId(authorId) && isValidObjectId(bookId)) {
-    await mongodb.getDb().db().collection('authors').updateOne(
-      { _id: ObjectId(authorId) },
-      { $addToSet: { booksWritten: ObjectId(bookId) } }
+// Helper function to update number of reviews
+const updateNumReviews = async (bookId) => {
+  if (ObjectId.isValid(bookId)) {
+    const numReviews = await mongodb.getDb().db().collection('reviews').countDocuments({ bookId: ObjectId(bookId) });
+    await mongodb.getDb().db().collection('books').updateOne(
+      { _id: ObjectId(bookId) },
+      { $set: { numReview: numReviews } }
     );
   }
 };
@@ -36,8 +33,8 @@ const getAllBooks = async (req, res) => {
 // Get a single book by ID
 const getBookById = async (req, res) => {
   const bookId = req.params.id;
-  
-  if (!isValidObjectId(bookId)) {
+
+  if (!ObjectId.isValid(bookId)) {
     return res.status(400).json({ error: 'Invalid book ID' });
   }
 
@@ -56,47 +53,23 @@ const getBookById = async (req, res) => {
 
 // Create a new book
 const createBook = async (req, res) => {
-  const { title, authorId, genreId, publishedYear, summary } = req.body;
+  const book = {
+    title: req.body.title,
+    authorName: req.body.authorName,
+    genreId: req.body.genreId,
+    publishedYear: req.body.publishedYear,
+    summary: req.body.summary,
+    quote: req.body.quote,
+    numReview: 0, // Initialize with 0 reviews
+  };
 
-  if (!isValidObjectId(authorId) || !isValidObjectId(genreId)) {
-    return res.status(400).json({ error: 'Invalid author ID or genre ID' });
-  }
-
-  // Check if author and genre exist
-  const authorExists = await checkExistence('authors', authorId);
-  const genreExists = await checkExistence('genres', genreId);
-
-  if (!authorExists) {
-    // Create a new author if it does not exist
-    const newAuthor = {
-      firstName: 'Unknown',
-      lastName: 'Unknown',
-      booksWritten: [ObjectId()],
-    };
-    const authorResponse = await mongodb.getDb().db().collection('authors').insertOne(newAuthor);
-    if (authorResponse.acknowledged) {
-      authorId = authorResponse.insertedId;
-    } else {
-      return res.status(500).json({ error: 'Error creating author' });
-    }
-  }
-
-  if (!genreExists) {
-    return res.status(404).json({ error: 'Genre not found' });
+  if (!validateBookData(book)) {
+    return res.status(400).json({ error: 'Invalid book data' });
   }
 
   try {
-    const newBook = {
-      title,
-      authorId: ObjectId(authorId),
-      genreId: ObjectId(genreId),
-      publishedYear,
-      summary,
-    };
-
-    const response = await mongodb.getDb().db().collection('books').insertOne(newBook);
+    const response = await mongodb.getDb().db().collection('books').insertOne(book);
     if (response.acknowledged) {
-      await addBookToAuthor(authorId, response.insertedId);
       res.status(201).json(response);
     } else {
       res.status(500).json({ error: 'Some error occurred while creating the book.' });
@@ -110,22 +83,30 @@ const createBook = async (req, res) => {
 // Update an existing book
 const updateBook = async (req, res) => {
   const bookId = req.params.id;
-  const { title, authorId, genreId, publishedYear, summary } = req.body;
+  const updateFields = {
+    title: req.body.title,
+    authorName: req.body.authorName,
+    genreId: req.body.genreId,
+    publishedYear: req.body.publishedYear,
+    summary: req.body.summary,
+    quote: req.body.quote,
+  };
 
-  if (!isValidObjectId(bookId) || !isValidObjectId(authorId) || !isValidObjectId(genreId)) {
-    return res.status(400).json({ error: 'Invalid IDs' });
+  if (!ObjectId.isValid(bookId)) {
+    return res.status(400).json({ error: 'Invalid book ID' });
+  }
+
+  if (!validateBookData(updateFields)) {
+    return res.status(400).json({ error: 'Invalid book data' });
   }
 
   try {
-    // Update book
     const response = await mongodb.getDb().db().collection('books').updateOne(
       { _id: ObjectId(bookId) },
-      { $set: { title, authorId: ObjectId(authorId), genreId: ObjectId(genreId), publishedYear, summary } }
+      { $set: updateFields }
     );
-
     if (response.modifiedCount > 0) {
-      // Update the author if needed
-      await addBookToAuthor(authorId, bookId);
+      await updateNumReviews(bookId);
       res.status(200).json(response);
     } else {
       res.status(404).json({ error: 'Book not found' });
@@ -140,19 +121,15 @@ const updateBook = async (req, res) => {
 const deleteBook = async (req, res) => {
   const bookId = req.params.id;
 
-  if (!isValidObjectId(bookId)) {
+  if (!ObjectId.isValid(bookId)) {
     return res.status(400).json({ error: 'Invalid book ID' });
   }
 
   try {
-    // Remove book
     const response = await mongodb.getDb().db().collection('books').deleteOne({ _id: ObjectId(bookId) });
     if (response.deletedCount > 0) {
-      // Optionally remove the book ID from the author's booksWritten field
-      await mongodb.getDb().db().collection('authors').updateMany(
-        {},
-        { $pull: { booksWritten: ObjectId(bookId) } }
-      );
+      // Optionally, delete related reviews
+      await mongodb.getDb().db().collection('reviews').deleteMany({ bookId: ObjectId(bookId) });
       res.status(200).json(response);
     } else {
       res.status(404).json({ error: 'Book not found' });
