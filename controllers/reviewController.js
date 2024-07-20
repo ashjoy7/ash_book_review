@@ -65,6 +65,8 @@ const createReview = async (req, res) => {
     comment: req.body.comment,
   };
 
+  console.log('Creating review with data:', review); // Log review data
+
   if (!validateReviewData(review)) {
     return res.status(400).json({ error: 'Invalid review data' });
   }
@@ -92,6 +94,8 @@ const updateReview = async (req, res) => {
     comment: req.body.comment,
     bookId: req.body.bookId, // Ensure bookId is included for updating numReviews
   };
+
+  console.log('Updating review with id:', reviewId, 'and data:', updateFields); // Log review ID and update fields
 
   // Validate reviewId
   if (!ObjectId.isValid(reviewId)) {
