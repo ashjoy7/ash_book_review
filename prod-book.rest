@@ -22,7 +22,7 @@ Content-Type: application/json
 
 # Update a book
 ###
-PUT https://ash-book-review.onrender.com/books/{id} HTTP/1.1
+PUT https://ash-book-review.onrender.com/books/669b08a0c9af204b199998d6 HTTP/1.1
 Content-Type: application/json
 
 {
@@ -37,4 +37,4 @@ Content-Type: application/json
 
 # Delete a book
 ###
-DELETE https://ash-book-review.onrender.com/books/{id} HTTP/1.1
+DELETE https://ash-book-review.onrender.com/books/669b08a0c9af204b199998d6 HTTP/1.1

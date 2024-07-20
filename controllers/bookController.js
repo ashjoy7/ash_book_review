@@ -32,7 +32,7 @@ const getAllBooks = async (req, res) => {
 
 // Get a single book by ID
 const getBookById = async (req, res) => {
-  const bookId = req.params.id;
+  const bookId = req.params.bookId; // Updated to match route parameter
 
   if (!ObjectId.isValid(bookId)) {
     return res.status(400).json({ error: 'Invalid book ID' });
@@ -56,7 +56,7 @@ const createBook = async (req, res) => {
   const book = {
     title: req.body.title,
     authorName: req.body.authorName,
-    genre: req.body.genre,
+    genre: req.body.genre, // Updated to genre instead of genreId
     publishedYear: req.body.publishedYear,
     summary: req.body.summary,
     quote: req.body.quote,
@@ -82,11 +82,11 @@ const createBook = async (req, res) => {
 
 // Update an existing book
 const updateBook = async (req, res) => {
-  const bookId = req.params.id;
+  const bookId = req.params.bookId; // Updated to match route parameter
   const updateFields = {
     title: req.body.title,
     authorName: req.body.authorName,
-    genre: req.body.genre,
+    genre: req.body.genre, // Updated to genre instead of genreId
     publishedYear: req.body.publishedYear,
     summary: req.body.summary,
     quote: req.body.quote,
@@ -119,7 +119,7 @@ const updateBook = async (req, res) => {
 
 // Delete a book
 const deleteBook = async (req, res) => {
-  const bookId = req.params.id;
+  const bookId = req.params.bookId; // Updated to match route parameter
 
   if (!ObjectId.isValid(bookId)) {
     return res.status(400).json({ error: 'Invalid book ID' });
