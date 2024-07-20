@@ -1,39 +1,30 @@
-### Create a new genre
-POST https://ash-book-review.onrender.com/genres
+# Get all genres
+GET https://ash-book-review.onrender.com/genres HTTP/1.1
+
+# Get a single genre by ID
+###
+GET https://ash-book-review.onrender.com/genres/{id} HTTP/1.1
+
+# Create a new genre
+###
+POST https://ash-book-review.onrender.com/genres HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Science Fiction",
-  "description": "A genre of speculative fiction that explores imaginative and futuristic concepts."
+  "genreName": "Dystopian",
+  "genreDescription": "A genre that explores social and political structures in a dark and often oppressive future."
 }
 
+# Update a genre
 ###
-
-### Get all genres (after creating at least one)
-GET https://ash-book-review.onrender.com/genres
-Content-Type: application/json
-
-###
-
-### Get a single genre by ID (replace {id} with the actual ID from the creation response)
-GET https://ash-book-review.onrender.com/genres/{id}
-Content-Type: application/json
-
-###
-
-### Update an existing genre (replace {id} with the actual ID from the creation response)
-PUT https://ash-book-review.onrender.com/genres/{id}
+PUT https://ash-book-review.onrender.com/genres/669b06759205634a6d656697 HTTP/1.1
 Content-Type: application/json
 
 {
-  "name": "Fantasy",
-  "description": "A genre of speculative fiction set in a fictional universe often inspired by mythology and folklore."
+  "genreName": "Science Fiction",
+  "genreDescription": "Fiction dealing with imaginative and futuristic concepts."
 }
 
+# Delete a genre
 ###
-
-### Delete a genre (replace {id} with the actual ID from the creation response)
-DELETE https://ash-book-review.onrender.com/genres/{id}
-Content-Type: application/json
-
-###
+DELETE https://ash-book-review.onrender.com/genres/{id} HTTP/1.1

@@ -26,7 +26,7 @@ const getGenreById = async (req, res) => {
   }
 
   try {
-    const genre = await mongodb.getDb().db().collection('genres').findOne({ _id: ObjectId(genreId) });
+    const genre = await mongodb.getDb().db().collection('genres').findOne({ _id: new ObjectId(genreId) });
     if (genre) {
       res.status(200).json(genre);
     } else {
@@ -80,7 +80,7 @@ const updateGenre = async (req, res) => {
 
   try {
     const response = await mongodb.getDb().db().collection('genres').updateOne(
-      { _id: ObjectId(genreId) },
+      { _id: new ObjectId(genreId) },
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
@@ -103,7 +103,7 @@ const deleteGenre = async (req, res) => {
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('genres').deleteOne({ _id: ObjectId(genreId) });
+    const response = await mongodb.getDb().db().collection('genres').deleteOne({ _id: new ObjectId(genreId) });
     if (response.deletedCount > 0) {
       res.status(200).json(response);
     } else {

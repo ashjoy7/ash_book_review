@@ -1,34 +1,40 @@
+# Get all books
+GET https://ash-book-review.onrender.com/books HTTP/1.1
+
+# Get a single book by ID
+###
+GET https://ash-book-review.onrender.com/books/{id} HTTP/1.1
+
 # Create a new book
+###
 POST https://ash-book-review.onrender.com/books HTTP/1.1
 Content-Type: application/json
 
 {
   "title": "1984",
-  "authorId": "64a0f06d0cfae412fe1e1b25",
-  "description": "A dystopian social science fiction novel and cautionary tale.",
+  "authorName": "George Orwell",
+  "genreId": "605c72ef2f8fb814a8bde896",
   "publishedYear": 1949,
-  "genre": "Dystopian",
-  "rating": 5
+  "summary": "A dystopian social science fiction novel and cautionary tale about the future.",
+  "quote": "Big Brother is watching you.",
+  "numReview": 0
 }
 
-# Get all books
-GET https://ash-book-review.onrender.com/books HTTP/1.1
-
-# Get a book by ID
-GET https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1
-
 # Update a book
-PUT https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1
+###
+PUT https://ash-book-review.onrender.com/books/{id} HTTP/1.1
 Content-Type: application/json
 
 {
   "title": "1984",
-  "authorId": "64a0f06d0cfae412fe1e1b25",  // Replace with actual authorId
-  "description": "A dystopian social science fiction novel and cautionary tale.",
+  "authorName": "George Orwell",
+  "genreId": "605c72ef2f8fb814a8bde896",
   "publishedYear": 1949,
-  "genre": "Dystopian",
-  "rating": 4
+  "summary": "An updated summary of the book.",
+  "quote": "Big Brother is watching you.",
+  "numReview": 5
 }
 
 # Delete a book
-DELETE https://ash-book-review.onrender.com/books/{bookId} HTTP/1.1
+###
+DELETE https://ash-book-review.onrender.com/books/{id} HTTP/1.1
