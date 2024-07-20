@@ -4,9 +4,9 @@ const reviewController = require('../controllers/reviewController');
 
 // Define routes relative to '/reviews'
 router.get('/', reviewController.getAllReviews);
-router.get('/:reviewId', reviewController.getReviewById);
+router.get('/:id', reviewController.getReviewById);
 router.post('/', reviewController.createReview);
-router.put('/:reviewId', reviewController.updateReview);
-router.delete('/:reviewId', reviewController.deleteReview);
+router.put('/:id', reviewController.updateReview);
+router.delete('/:id', reviewController.deleteReview);
 
 module.exports = router;
