@@ -19,11 +19,13 @@ Content-Type: application/json
 
 # Update a review
 ###
-PUT https://ash-book-review.onrender.com/reviews/{id} HTTP/1.1
+PUT https://ash-book-review.onrender.com/reviews/669b0d6baf8ede6f5caa2e8f HTTP/1.1
 Content-Type: application/json
 
 {
-  "rating": 4,
+  "bookId": "605c72ef2f8fb814a8bde897",
+  "reviewerId": "605c72ef2f8fb814a8bde898",
+  "rating": 5,
   "comment": "A fascinating read with a few slow moments."
 }
 

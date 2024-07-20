@@ -3,7 +3,11 @@ const { ObjectId } = require('mongodb');
 
 // Helper function to validate review data
 const validateReviewData = (data) => {
-  return data && typeof data.bookId === 'string' && typeof data.reviewerId === 'string' && typeof data.rating === 'number' && typeof data.comment === 'string';
+  return data &&
+    typeof data.bookId === 'string' &&
+    typeof data.reviewerId === 'string' &&
+    typeof data.rating === 'number' &&
+    typeof data.comment === 'string';
 };
 
 // Helper function to update the number of reviews for a book
@@ -86,25 +90,28 @@ const updateReview = async (req, res) => {
   const updateFields = {
     rating: req.body.rating,
     comment: req.body.comment,
+    bookId: req.body.bookId, // Ensure bookId is included for updating numReviews
   };
 
+  // Validate reviewId
   if (!ObjectId.isValid(reviewId)) {
     return res.status(400).json({ error: 'Invalid review ID' });
   }
 
+  // Validate review data
   if (!validateReviewData({ ...updateFields, bookId: req.body.bookId })) {
     return res.status(400).json({ error: 'Invalid review data' });
   }
 
   try {
     const response = await mongodb.getDb().db().collection('reviews').updateOne(
-      { _id: new ObjectId(reviewId) },
+      { _id: new ObjectId(reviewId) }, // Correctly instantiate ObjectId
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
       // Update the number of reviews for the book if the bookId is provided
-      if (req.body.bookId) {
-        await updateNumReviews(req.body.bookId);
+      if (updateFields.bookId) {
+        await updateNumReviews(updateFields.bookId);
       }
       res.status(200).json(response);
     } else {
