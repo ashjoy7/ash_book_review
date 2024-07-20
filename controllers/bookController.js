@@ -11,9 +11,9 @@ const validateBookData = (data) => {
 // Helper function to update number of reviews
 const updateNumReviews = async (bookId) => {
   if (ObjectId.isValid(bookId)) {
-    const numReviews = await mongodb.getDb().db().collection('reviews').countDocuments({ bookId: ObjectId(bookId) });
+    const numReviews = await mongodb.getDb().db().collection('reviews').countDocuments({ bookId: new ObjectId(bookId) });
     await mongodb.getDb().db().collection('books').updateOne(
-      { _id: ObjectId(bookId) },
+      { _id: new ObjectId(bookId) },
       { $set: { numReview: numReviews } }
     );
   }
@@ -39,7 +39,7 @@ const getBookById = async (req, res) => {
   }
 
   try {
-    const book = await mongodb.getDb().db().collection('books').findOne({ _id: ObjectId(bookId) });
+    const book = await mongodb.getDb().db().collection('books').findOne({ _id: new ObjectId(bookId) });
     if (book) {
       res.status(200).json(book);
     } else {
@@ -102,7 +102,7 @@ const updateBook = async (req, res) => {
 
   try {
     const response = await mongodb.getDb().db().collection('books').updateOne(
-      { _id: ObjectId(bookId) },
+      { _id: new ObjectId(bookId) },
       { $set: updateFields }
     );
     if (response.modifiedCount > 0) {
@@ -126,10 +126,10 @@ const deleteBook = async (req, res) => {
   }
 
   try {
-    const response = await mongodb.getDb().db().collection('books').deleteOne({ _id: ObjectId(bookId) });
+    const response = await mongodb.getDb().db().collection('books').deleteOne({ _id: new ObjectId(bookId) });
     if (response.deletedCount > 0) {
       // Optionally, delete related reviews
-      await mongodb.getDb().db().collection('reviews').deleteMany({ bookId: ObjectId(bookId) });
+      await mongodb.getDb().db().collection('reviews').deleteMany({ bookId: new ObjectId(bookId) });
       res.status(200).json(response);
     } else {
       res.status(404).json({ error: 'Book not found' });
